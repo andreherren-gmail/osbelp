@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2er-Gruppen Bilden – Oberstufe</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a36;
+      --accent:#66e0ff;
+      --ink:#e9f0ff;
+      --muted:#9bb0d1;
+      --ok:#7CFFB2;
+      --warn:#ff9f6e;
+      --danger:#ff6e6e;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 10% -10%, #1b2550 0%, transparent 70%),
+                  radial-gradient(1200px 600px at 110% 10%, #133a5a 0%, transparent 70%),
+                  var(--bg);
+      color:var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      padding:24px;
+    }
+    .app{width:100%; margin-inline:auto}
+    header{display:flex; align-items:center; gap:14px; margin-bottom:16px}
+    .logo{
+      width:44px;height:44px;border-radius:10px;
+      background: conic-gradient(from 0deg, var(--accent), #6fffcd, #ffd56a, #ff8ab0, var(--accent));
+      box-shadow: 0 0 24px #2cf7ff55 inset, 0 0 24px #2cf7ff44;
+      position:relative;
+    }
+    .logo::after{content:"🎰"; position:absolute; inset:0; display:grid; place-items:center; font-size:24px; filter:drop-shadow(0 2px 2px #0007)}
+    h1{margin:0;font-weight:800;letter-spacing:0.3px;font-size: clamp(22px, 3.4vw, 30px);}
+    .subtitle{color:var(--muted); margin-top:2px}
+    .stack{display:flex; flex-direction:column; gap:16px}
+    .card{
+      background: linear-gradient(180deg, #1a2550 0%, #101733 100%);
+      border:1px solid #2a3969;
+      border-radius:14px;
+      padding:16px;
+      box-shadow: 0 10px 30px #0007, inset 0 1px 0 #3a4e88;
+      position:relative;
+      overflow:hidden;
+    }
+    label{font-weight:600; display:block; margin-bottom:8px}
+    textarea, select, button{
+      width:100%;
+      background:#0e1430;
+      color:var(--ink);
+      border:1px solid #2a3969;
+      border-radius:10px;
+      padding:12px 14px;
+      font-size:16px;
+      outline:none;
+      transition:.2s border-color, .2s transform;
+    }
+    textarea{min-height:220px; resize:vertical}
+    select{appearance:none; background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+           background-position: calc(100% - 20px) calc(1.05em), calc(100% - 15px) calc(1.05em);
+           background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;}
+    button{
+      cursor:pointer; font-weight:700;
+      background: linear-gradient(180deg, #0fd6ff, #0bb4df);
+      border:0; color:#001025; text-shadow:0 1px 0 #fff6;
+      box-shadow: 0 6px 20px #00d0ff55, 0 1px 0 #74f2ff inset;
+    }
+    button.secondary{
+      background: linear-gradient(180deg, #ffd56a, #ffb04d);
+      box-shadow: 0 6px 20px #ffa54d55, 0 1px 0 #fff0cc inset; color:#3b2200;
+    }
+    button.ghost{background: transparent; color: var(--ink); border:1px dashed #3a4e88; text-shadow:none; box-shadow:none;}
+    button:active{transform: translateY(1px)}
+    .controls{display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px}
+    .inline{display:flex; gap:12px; align-items:center; margin-top:8px}
+    .inline > *{flex:1}
+    .hint{font-size:13px; color:var(--muted); margin-top:8px}
+    .status{margin-top:8px; font-weight:600}
+    .status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.bad{color:var(--danger)}
+    .toolbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .footer{margin-top:18px; font-size:12px; color:var(--muted); text-align:center}
+
+    /* Results full width */
+    #results-card{padding-top:8px}
+    .results{display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:20px; min-height: 120px; scroll-margin-top: 12px}
+    @media (max-width: 720px){ .results{grid-template-columns: 1fr} }
+
+    .group{
+      position:relative;
+      background: linear-gradient(180deg, #0f1536 0%, #0a0f28 100%);
+      border:1px solid #283560;
+      border-radius:14px;
+      padding:12px; overflow:hidden;
+      box-shadow: 0 8px 22px #0007, inset 0 1px 0 #2b3f7a;
+    }
+    .group h3{margin:0 0 8px; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:#a8c1ff}
+    .slot{
+      position:relative;
+      height:400px;
+      overflow:hidden;
+      border-radius:14px; border:1px solid #31457e;
+      background: radial-gradient(300px 64px at 50% 0%, #1a2550 0%, #0a0f28 70%);
+      box-shadow: inset 0 1px 0 #4a65b2;
+    }
+    .reel{position:absolute; inset:0; display:flex; flex-direction:column; gap:12px; padding:2px 14px 14px 14px; transform: translateY(0)}
+    .cell{
+      padding:10px 28px 26px 28px; /* reduced top padding to tighten top margin */
+      align-items: center;        /* Text vertikal zentrieren */
+      justify-content: center;    /* horizontal zentrieren */
+      border-radius:18px;
+      min-height: 100px;
+      background:#0b1333;
+      border:1px solid #243363;
+      font-weight:900;
+      font-size:44px;
+      line-height:1.15;
+      text-align:center;
+      color:#f6f8ff;
+      white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
+      box-shadow:inset 0 2px 0 #3a4e88, 0 4px 16px #000a;
+    }
+    .group .badge{
+      position:absolute; right:10px; top:10px; font-size:11px; background:#0fd6ff22; border:1px solid #2b6b8f; color:#a9f2ff;
+      padding:2px 6px; border-radius:999px; letter-spacing:0.6px;
+    }
+    .shine{position:absolute; inset:-1px; pointer-events:none; background: conic-gradient(from 0deg at 10% 10%, #ffffff15, transparent 15% 70%, #ffffff08 80%); filter: blur(8px); border-radius:14px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>🎰 2er-Gruppen Bilden</h1>
+        <div class="subtitle">Für Oberstufenklassen – Namen einfügen, Gruppengrösse wählen, Jackpot starten!</div>
+      </div>
+    </header>
+
+    <div class="stack">
+      <!-- Inputs card -->
+      <section class="card" id="inputs-card">
+        <label for="names">Namen (je eine Zeile)</label>
+        <textarea id="names" placeholder="Max Muster
+Eva Beispiel
+..."></textarea>
+
+        <div class="inline">
+          <div style="flex:0.8">
+            <label for="size">Gruppengrösse</label>
+            <select id="size">
+              <option value="2" selected>2 Personen</option>
+              <option value="3">3 Personen</option>
+              <option value="4">4 Personen</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="go">🎲 Gruppen bilden</button>
+          <button class="secondary" id="reshuffle">🔁 Neu mischen</button>
+        </div>
+        <div class="hint">Tipp: Ideal sind 15–20 Namen. Ungerade oder Restzahlen werden automatisch fair aufgeteilt.</div>
+        <div class="status" id="status"></div>
+      </section>
+
+      <!-- Results card -->
+      <section class="card" id="results-card">
+        <div class="shine"></div>
+        <div class="toolbar">
+          <button class="ghost" id="copy">📋 Ergebnisse kopieren</button>
+          <button class="ghost" id="clear">🧹 Eingaben leeren</button>
+          <button class="ghost" id="sample">✨ Demo-Namen einfügen</button>
+        </div>
+        <div class="results" id="results" aria-live="polite"></div>
+        <div class="footer">Made for Klassenlehrpersonen • Keine Daten werden gespeichert • Offline nutzbar</div>
+      </section>
+    </div>
+  </div>
+
+<script>
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+function buildGroupsBalanced(names, size){
+  const clean = names.map(n=>n.trim()).filter(n=>n.length>0);
+  shuffle(clean);
+  let groups = [];
+  for(let i=0;i<clean.length;i+=size){
+    groups.push(clean.slice(i, i+size));
+  }
+  if(groups.length > 1){
+    const last = groups[groups.length-1];
+    if(last.length === 1){
+      for(let k=groups.length-2; k>=0 && last.length < 2; k--){
+        if(groups[k].length > 2){
+          last.unshift(groups[k].pop());
+        }
+      }
+    }
+  }
+  return groups;
+}
+function playDing(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "triangle";
+    o.frequency.setValueAtTime(880, ctx.currentTime);
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.25);
+    o.connect(g).connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime+0.26);
+  }catch(e){}
+}
+function renderGroups(groups){
+  const results = document.getElementById('results');
+  results.innerHTML = "";
+  const allNames = groups.flat();
+  const spinRounds = 10;
+  const baseDelay = 450;
+  groups.forEach((g, idx)=>{
+    const card = document.createElement('div');
+    card.className = 'group';
+    const title = document.createElement('h3');
+    title.textContent = `Gruppe ${idx+1}`;
+    const badge = document.createElement('div');
+    badge.className = 'badge';
+    badge.textContent = `${g.length} Schüler`;
+    const slot = document.createElement('div'); slot.className = 'slot';
+    const reel = document.createElement('div'); reel.className = 'reel';
+    slot.appendChild(reel);
+    const cells = [];
+    for(let r=0;r<spinRounds;r++){
+      const picks = shuffle([...allNames]).slice(0, g.length);
+      picks.forEach(p=>{
+        const c = document.createElement('div');
+        c.className = 'cell';
+        c.textContent = p;
+        cells.push(c);
+      });
+    }
+    g.forEach(p=>{
+      const c = document.createElement('div');
+      c.className = 'cell';
+      c.textContent = p;
+      cells.push(c);
+    });
+    cells.forEach(c=> reel.appendChild(c));
+    card.appendChild(title);
+    card.appendChild(badge);
+    card.appendChild(slot);
+    results.appendChild(card);
+    setTimeout(()=>{
+      const anyCell = reel.querySelector('.cell');
+      const h = anyCell ? anyCell.getBoundingClientRect().height + 12 : 36;
+      const total = cells.length;
+      const finalOffset = -(h * (total - g.length));
+      const duration = 1100 + idx*baseDelay + Math.random()*300;
+      reel.style.transition = `transform ${duration}ms cubic-bezier(.17,.67,.22,1.08)`;
+      reel.style.transform = `translateY(0px)`;
+      setTimeout(()=>{
+        reel.style.transform = `translateY(${finalOffset}px)`;
+        setTimeout(()=> playDing(), duration-120);
+      }, 30);
+    }, 0);
+  });
+}
+function copyResults(groups){
+  const lines = groups.map((g,i)=>`Gruppe ${i+1}: ${g.join(' | ')}`);
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(()=>{
+    toast('Ergebnisse kopiert ✅');
+  }, ()=>{
+    alert('Kopieren nicht erlaubt – bitte manuell markieren.');
+  });
+}
+function toast(msg){
+  const t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position:'fixed', left:'50%', bottom:'24px', transform:'translateX(-50%)',
+    background:'#0fd6ff', color:'#001225', padding:'10px 14px', borderRadius:'999px',
+    fontWeight:'800', boxShadow:'0 8px 22px #00d0ff55', zIndex:9999
+  });
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity .3s'; t.style.opacity='0'; }, 1400);
+  setTimeout(()=> t.remove(), 1800);
+}
+let lastGroups = [];
+function getNamesList(){ return document.getElementById('names').value.split('\n') }
+function generateAndShow(scrollAfter=true){
+  const names = getNamesList();
+  const size = parseInt(document.getElementById('size').value, 10);
+  const clean = names.map(n=>n.trim()).filter(Boolean);
+  const info = document.getElementById('status');
+  if(clean.length === 0){
+    info.className = "status bad";
+    info.textContent = "Bitte zuerst Namen eingeben.";
+    return;
+  }
+  if(clean.length < 15 || clean.length > 30){
+    info.className = "status warn";
+    info.textContent = `Hinweis: Du hast ${clean.length} Namen eingetragen. Empfohlen sind 15–20 (funktioniert aber auch so).`;
+  } else {
+    info.className = "status ok";
+    info.textContent = `Perfekt: ${clean.length} Namen – Gruppengrösse ${size}.`;
+  }
+  const groups = buildGroupsBalanced(clean, size);
+  if(groups.length){
+    lastGroups = groups;
+    renderGroups(groups);
+    if(scrollAfter){
+      document.getElementById('results-card').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }
+}
+document.getElementById('go').addEventListener('click', ()=> generateAndShow(true));
+document.getElementById('reshuffle').addEventListener('click', ()=> generateAndShow(false));
+document.getElementById('copy').addEventListener('click', ()=>{
+  if(!lastGroups.length){ toast('Zuerst Gruppen bilden 🙂'); return; }
+  copyResults(lastGroups);
+});
+document.getElementById('clear').addEventListener('click', ()=>{
+  document.getElementById('names').value='';
+  document.getElementById('results').innerHTML='';
+  document.getElementById('status').textContent='';
+});
+document.getElementById('sample').addEventListener('click', ()=>{
+  const demo = [
+    "Anouk","Loris","Mia","Ben","Lina","Noah","Emilia","Levi","Lea","Luca",
+    "Nina","Elias","Sofia","Jonas","Marie","Leon","Emma","Paul","Nora","Finn"
+  ];
+  document.getElementById('names').value = demo.join('\n'); // real newlines
+  toast('Demo-Namen eingefügt ✨');
+});
+</script>
+</body>
+</html>
