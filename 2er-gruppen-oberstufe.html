@@ -265,7 +265,7 @@ function renderGroups(groups){
       const h = anyCell ? anyCell.getBoundingClientRect().height + 12 : 36;
       const total = cells.length;
       const finalOffset = -(h * (total - g.length));
-      const duration = 1100 + idx*baseDelay + Math.random()*300;
+      const duration = 4000 + idx*baseDelay + Math.random()*300;
       reel.style.transition = `transform ${duration}ms cubic-bezier(.17,.67,.22,1.08)`;
       reel.style.transform = `translateY(0px)`;
       setTimeout(()=>{
