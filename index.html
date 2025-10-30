@@ -28,7 +28,6 @@
       background:linear-gradient(180deg,var(--bg),#0a0f1a 40%, var(--bg) 100%);
       color:var(--text);
     }
-    /* Appbar */
     .appbar{
       position:sticky; top:0; z-index:40;
       display:flex; align-items:center; justify-content:space-between; gap:8px;
@@ -45,23 +44,15 @@
     .btn.ghost{background:transparent}
     .avatar{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;background:#0c1426;overflow:hidden}
     .avatar img{width:100%;height:100%;object-fit:cover}
-    /* Drawer */
-    .drawer{
-      position:fixed; inset:0 auto 0 0; width:min(86%,360px); background:#0b1220; border-right:1px solid #141c2e;
-      transform:translateX(-100%); transition:.25s transform ease; z-index:60; display:flex; flex-direction:column;
-    }
+    .drawer{position:fixed;inset:0 auto 0 0;width:min(86%,360px);background:#0b1220;border-right:1px solid #141c2e;transform:translateX(-100%);transition:.25s transform ease;z-index:60;display:flex;flex-direction:column}
     .drawer.open{transform:translateX(0)}
     .drawer-header{padding:14px;border-bottom:1px solid #141c2e;display:flex;align-items:center;justify-content:space-between}
     .drawer-list{overflow:auto;-webkit-overflow-scrolling:touch;padding:8px 8px 96px}
     .chat-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;border:1px solid transparent}
     .chat-item:hover{background:#0f172a;border-color:#1f2937}
     .chat-item.active{background:#0f172a;border-color:#283245}
-    /* Main chat column */
     .wrap{min-height:100%;display:flex;flex-direction:column}
-    .chat{
-      flex:1; overflow:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;
-      padding:12px 12px 120px;
-    }
+    .chat{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:12px 12px 120px}
     .container{max-width:760px;margin:0 auto}
     .msg{display:flex;gap:10px;margin:12px 0}
     .msg .bubble{padding:12px 14px;border-radius:16px;border:1px solid var(--border);line-height:1.55}
@@ -71,43 +62,23 @@
     .attachments{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .attachment{width:88px;height:88px;border-radius:10px;border:1px solid #253146;overflow:hidden;background:#0c1426;display:grid;place-items:center}
     .attachment img{width:100%;height:100%;object-fit:cover}
-    /* Empty */
     .empty{margin:12vh auto 0;max-width:640px;text-align:center;color:var(--muted)}
     .empty h2{color:#e5e7eb;font-size:20px;margin:0 0 8px}
     .tips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
     .tip{padding:10px;border:1px dashed #263245;border-radius:12px;color:#cbd5e1;background:linear-gradient(180deg,#0d1526,#0a101c)}
     @media(min-width:720px){.tips{grid-template-columns:repeat(4,1fr)}}
-    /* Composer */
-    .composer{
-      position:fixed;left:0;right:0;bottom:0;z-index:40;
-      padding:12px 12px calc(12px + env(safe-area-inset-bottom));
-      background:linear-gradient(180deg, rgba(10,14,22,0), rgba(10,14,22,.85) 30%, rgba(10,14,22,.95));
-      display:grid;place-items:center;
-    }
-    .composer-inner{
-      width:100%;max-width:780px;display:flex;align-items:flex-end;gap:8px;
-      background:#0c1426;border:1px solid var(--border);border-radius:24px;padding:8px;
-      box-shadow:0 0 0 2px transparent;transition:.15s box-shadow ease,.15s border-color ease;
-    }
+    .composer{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:12px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg, rgba(10,14,22,0), rgba(10,14,22,.85) 30%, rgba(10,14,22,.95));display:grid;place-items:center}
+    .composer-inner{width:100%;max-width:780px;display:flex;align-items:flex-end;gap:8px;background:#0c1426;border:1px solid var(--border);border-radius:24px;padding:8px;box-shadow:0 0 0 2px transparent;transition:.15s box-shadow ease,.15s border-color ease}
     .composer-inner:focus-within{box-shadow:0 0 0 2px var(--ring)}
     .icon-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid #1e293b;background:#0a1222;cursor:pointer}
     .hidden-input{display:none}
     textarea{flex:1;resize:none;max-height:28vh;min-height:44px;background:transparent;border:none;color:var(--text);font-size:16px;line-height:1.5;outline:none;padding:10px 8px}
     textarea:disabled{opacity:.6;cursor:not-allowed}
-    /* Round send button */
-    .send-btn{
-      width:44px;height:44px;border-radius:999px;border:1px solid #164e63;
-      background:linear-gradient(180deg,#0e1a2b,#0a1322);
-      display:grid;place-items:center;cursor:pointer;flex:0 0 auto;
-      box-shadow:inset 0 0 0 1px #113246, 0 6px 18px rgba(0,0,0,.3);
-      transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;
-      color:#a5f3fc;
-    }
+    .send-btn{width:44px;height:44px;border-radius:999px;border:1px solid #164e63;background:linear-gradient(180deg,#0e1a2b,#0a1322);display:grid;place-items:center;cursor:pointer;flex:0 0 auto;box-shadow:inset 0 0 0 1px #113246, 0 6px 18px rgba(0,0,0,.3);transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;color:#a5f3fc}
     .send-btn:hover{transform:translateY(-1px); box-shadow:inset 0 0 0 1px #1e7498, 0 8px 20px rgba(0,0,0,.35)}
     .send-btn:active{transform:translateY(0)}
     .send-btn.disabled{opacity:.5;cursor:not-allowed}
     .send-icon{font-size:18px;line-height:1;transform:translateX(1px)}
-    /* Typing indicator */
     .typing .bubble{display:inline-flex;gap:8px;align-items:center}
     .dollar{display:inline-block;font-weight:700;color:var(--money);opacity:.2;transform:translateY(0) scale(1);animation:blink .9s infinite}
     .dollar:nth-child(2){animation-delay:.15s}
@@ -116,7 +87,6 @@
   </style>
 </head>
 <body>
-  <!-- Drawer -->
   <aside class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer-header">
       <strong>Budgets</strong>
@@ -128,7 +98,6 @@
     </div>
   </aside>
 
-  <!-- App Bar -->
   <header class="appbar">
     <div class="brand">
       <button class="btn ghost" id="openDrawer" aria-label="Budgets"><span>≡</span></button>
@@ -146,7 +115,6 @@
     </div>
   </header>
 
-  <!-- Main -->
   <main class="wrap">
     <section class="chat">
       <div class="container" id="chatContainer">
@@ -164,22 +132,18 @@
     </section>
   </main>
 
-  <!-- Composer -->
   <div class="composer">
     <div class="composer-inner">
       <button class="icon-btn" id="addBtn" title="Beleg/Foto">＋</button>
       <input class="hidden-input" id="fileInput" type="file" accept="image/*" multiple capture="environment">
       <textarea id="input" rows="1" placeholder="Schreibe eine Ausgabe (z.B. „Bäckerei 4.60“) oder einen Befehl (z.B. „Zeige Einträge“)" aria-label="Nachricht" enterkeyhint="newline" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
-      <button id="sendBtn" class="send-btn" title="Senden" aria-label="Senden">
-        <span class="send-icon">➤</span>
-      </button>
+      <button id="sendBtn" class="send-btn" title="Senden" aria-label="Senden"><span class="send-icon">➤</span></button>
     </div>
     <small style="display:block;text-align:center;color:var(--muted);margin-top:8px">
       Zeilenumbruch: Enter • Senden: Button • Prototyp speichert lokal (max. 10 Einträge)
     </small>
   </div>
 
-  <!-- Modal: Sign in -->
   <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="position:fixed;inset:0;display:none;place-items:center;z-index:80;background:rgba(5,8,13,.6);backdrop-filter:blur(6px)">
     <div class="card" style="width:min(92vw,420px);background:#0b1220;border:1px solid #1c2436;border-radius:16px;padding:16px;box-shadow:var(--shadow)">
       <h3 id="authTitle">Anmelden</h3>
@@ -212,10 +176,9 @@
     const uid = ()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
     const activeChat = ()=> state.chats.find(c=>c.id===state.activeId) || null;
     const fmtDate = (ts)=> new Date(ts).toLocaleString(undefined,{dateStyle:'medium', timeStyle:'short'});
-    const escapeHTML = (s)=> s.replace(/[&<>\"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;' }[m]));
-    const autolink = (s)=> s.replace(/(https?:\\/\\/[^\\s)]+)|(CHF\\s*\\d+(?:[\\.,]\\d{2})?|\\d+(?:[\\.,]\\d{2})?\\s*CHF)/gi, '<u>$1$2</u>');
+    const escapeHTML = (s)=> s.replace(/[&<>\"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[m]));
+    const autolink = (s)=> s.replace(/(https?:\/\/[^\s)]+)|(CHF\s*\d+(?:[\.,]\d{2})?|\d+(?:[\.,]\d{2})?\s*CHF)/gi, '<u>$1$2</u>');
 
-    // UI refs
     const chatContainer = $('#chatContainer');
     const chatScroller = document.querySelector('.chat');
     const inputEl = $('#input');
@@ -245,7 +208,7 @@
     const setInputDisabled = (on)=>{
       inputDisabled = !!on;
       inputEl.disabled = on;
-      sendBtn.classList.toggle('disabled', on);
+      if(on) sendBtn.classList.add('disabled'); else sendBtn.classList.remove('disabled');
     };
     const focusComposer = ()=>{ if(!inputDisabled){ inputEl.focus(); setTimeout(()=>inputEl.focus(),0); } };
 
@@ -261,7 +224,6 @@
       }
     };
 
-    /* Drawer render */
     const renderDrawer = ()=>{
       chatList.innerHTML = '';
       if(state.chats.length===0){
@@ -299,7 +261,6 @@
     openDrawer.addEventListener('click', ()=>{drawer.classList.add('open'); renderDrawer()});
     closeDrawer.addEventListener('click', ()=>drawer.classList.remove('open'));
 
-    /* Chats */
     const newChat = ()=>{
       const id = uid();
       state.chats.push({id, title:'', createdAt:Date.now(), msgs:[], entries:[], receipts:[]});
@@ -312,7 +273,6 @@
     newChatBtn.addEventListener('click', newChat);
     newChatBtn2.addEventListener('click', newChat);
 
-    /* Render messages */
     const render = ()=>{
       const chat = activeChat();
       chatContainer.innerHTML='';
@@ -323,13 +283,16 @@
         chat.msgs.forEach(m=>{
           const row = document.createElement('div');
           row.className = 'msg '+(m.role==='user'?'user':'ai');
-          row.innerHTML = `
-            <div class="avatar" style="width:28px;height:28px">${m.role==='user'?(state.user?.name?.[0]?.toUpperCase()||'🧑'):'🤖'}</div>
-            <div style="flex:1">
-              <div class="bubble">${autolink(escapeHTML(m.text)).replace(/\\n/g,'<br>')}</div>
-              <div class="meta">${fmtDate(m.ts)}</div>
-              ${m.attachments?.length? `<div class="attachments">${m.attachments.map(a=>`<div class="attachment"><img alt="Beleg" src=\"${a.data}\"></div>`).join('')}</div>`:''}
-            </div>`;
+          const attachmentsHTML = m.attachments && m.attachments.length
+            ? '<div class="attachments">' + m.attachments.map(a => '<div class="attachment"><img alt="Beleg" src="'+a.data+'"></div>').join('') + '</div>'
+            : '';
+          row.innerHTML = ''
+            + '<div class="avatar" style="width:28px;height:28px">' + (m.role==='user'?(state.user?.name?.[0]?.toUpperCase()||'🧑'):'🤖') + '</div>'
+            + '<div style="flex:1">'
+            +   '<div class="bubble">' + autolink(escapeHTML(m.text)).replace(/\n/g,'<br>') + '</div>'
+            +   '<div class="meta">' + fmtDate(m.ts) + '</div>'
+            +   attachmentsHTML
+            + '</div>';
           chatContainer.appendChild(row);
         });
       }
@@ -351,18 +314,15 @@
       chat.msgs.push({role:'ai', text, ts:Date.now()}); save(); render();
     };
 
-    /* Typing */
     function showTyping(){
       const row = document.createElement('div');
       row.className = 'msg ai typing';
-      row.innerHTML = `
-        <div class="avatar" style="width:28px;height:28px">🤖</div>
-        <div style="flex:1">
-          <div class="bubble">
-            <span class="dollar">$</span><span class="dollar">$</span><span class="dollar">$</span>
-          </div>
-          <div class="meta">schreibt…</div>
-        </div>`;
+      row.innerHTML = ''
+        + '<div class="avatar" style="width:28px;height:28px">🤖</div>'
+        + '<div style="flex:1">'
+        +   '<div class="bubble"><span class="dollar">$</span><span class="dollar">$</span><span class="dollar">$</span></div>'
+        +   '<div class="meta">schreibt…</div>'
+        + '</div>';
       chatContainer.appendChild(row);
       ensureScroll();
       return row;
@@ -378,14 +338,13 @@
       }, delay);
     }
 
-    /* Commands & Entries */
     function handleCommandOrEntry(text){
       const t = text.trim();
       const low = t.toLowerCase();
-      const mShow = low.match(/^zeige (?:eintr[aä]ge|entries)(?:\\s+(\\d+))?/);
-      const mShowOne = low.match(/^zeige eintrag\\s+(\\d+)/);
-      const mDelete = low.match(/^l[öo]sche eintrag\\s+(\\d+)/);
-      const mSum = low.match(/^summe(?:\\s+(monat|woche))?/);
+      const mShow = low.match(/^zeige (?:eintr[aä]ge|entries)(?:\s+(\d+))?/);
+      const mShowOne = low.match(/^zeige eintrag\s+(\d+)/);
+      const mDelete = low.match(/^l[öo]sche eintrag\s+(\d+)/);
+      const mSum = low.match(/^summe(?:\s+(monat|woche))?/);
       const mHelp = low.match(/^hilfe$/);
 
       if(mHelp){ return pushAIWithTyping(helpText()); }
@@ -405,7 +364,7 @@
         return pushAIWithTyping(sumEntries());
       }
 
-      const amountMatch = t.match(/(\\d+[.,]\\d{1,2}|\\d+)/);
+      const amountMatch = t.match(/(\d+[.,]\d{1,2}|\d+)/);
       const amount = amountMatch ? parseFloat(amountMatch[1].replace(',','.')) : NaN;
       if(!isNaN(amount)){
         const label = t.replace(amountMatch[1], '').trim() || 'Ausgabe';
@@ -424,7 +383,7 @@
         '• **Summe** – Summe aller gespeicherten Einträge',
         '',
         'Ausgabe hinzufügen: *„Migros 18.40“*, *„Bäckerei 4.60“*'
-      ].join('\\n');
+      ].join('\n');
     }
 
     function addEntry(label, amount){
@@ -435,7 +394,7 @@
       if(chat.entries.length>10){ chat.entries = chat.entries.slice(-10); }
       save();
       const left = 10 - chat.entries.length;
-      pushAIWithTyping(`Notiert: **${escapeHTML(label)} – CHF ${amount.toFixed(2)}**.\\nEs sind jetzt **${chat.entries.length}/10** Einträge gespeichert.${left?` (noch ${left} frei)`:''}`);
+      pushAIWithTyping('Notiert: **' + escapeHTML(label) + ' – CHF ' + amount.toFixed(2) + '**.\nEs sind jetzt **' + chat.entries.length + '/10** Einträge gespeichert.' + (left?(' (noch ' + left + ' frei)'):'') );
       render();
     }
 
@@ -443,9 +402,9 @@
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = (chat.entries||[]).slice(-n);
       if(arr.length===0) return 'Keine Einträge vorhanden. Füge z.B. *„Migros 18.40“* hinzu.';
-      let out = 'Letzte Einträge:\\n';
+      let out = 'Letzte Einträge:\n';
       arr.forEach((e,i)=>{
-        out += `${i+1}. ${e.label} – CHF ${e.amount.toFixed(2)} (${fmtDate(e.ts)})\\n`;
+        out += (i+1)+'. '+e.label+' – CHF '+e.amount.toFixed(2)+' ('+fmtDate(e.ts)+')\n';
       });
       return out.trim();
     }
@@ -453,28 +412,27 @@
     function renderEntry(idx){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = chat.entries||[];
-      if(idx<1 || idx>arr.length) return `Eintrag ${idx} existiert nicht (1..${arr.length}).`;
+      if(idx<1 || idx>arr.length) return 'Eintrag '+idx+' existiert nicht (1..'+arr.length+').';
       const e = arr[idx-1];
-      return `Eintrag ${idx}: **${e.label}** – **CHF ${e.amount.toFixed(2)}**\\nDatum: ${fmtDate(e.ts)}`;
+      return 'Eintrag '+idx+': **'+e.label+'** – **CHF '+e.amount.toFixed(2)+'**\nDatum: '+fmtDate(e.ts);
     }
 
     function deleteEntry(idx){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = chat.entries||[];
-      if(idx<1 || idx>arr.length) return `Eintrag ${idx} existiert nicht (1..${arr.length}).`;
-      const [removed] = arr.splice(idx-1,1);
+      if(idx<1 || idx>arr.length) return 'Eintrag '+idx+' existiert nicht (1..'+arr.length+').';
+      const removed = arr.splice(idx-1,1)[0];
       save(); render();
-      return `Gelöscht: ${removed.label} – CHF ${removed.amount.toFixed(2)}. Jetzt ${(arr||[]).length}/10 Einträge.`;
+      return 'Gelöscht: '+removed.label+' – CHF '+removed.amount.toFixed(2)+'. Jetzt '+((arr||[]).length)+'/10 Einträge.';
     }
 
     function sumEntries(){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = chat.entries||[];
       const sum = arr.reduce((s,e)=>s+Number(e.amount||0),0);
-      return `Summe der gespeicherten Einträge: **CHF ${sum.toFixed(2)}** (${arr.length}/10 Einträge).`;
+      return 'Summe der gespeicherten Einträge: **CHF '+sum.toFixed(2)+'** ('+(arr.length)+'/10 Einträge).';
     }
 
-    /* Composer */
     inputEl.addEventListener('input', ()=>{
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, window.innerHeight*0.28) + 'px';
@@ -484,7 +442,7 @@
       const val = inputEl.value.trim();
       if(!val || inputDisabled) return;
       setInputDisabled(true);
-      const toSend = inputEl.value; // preserve newlines
+      const toSend = inputEl.value;
       inputEl.value='';
       inputEl.dispatchEvent(new Event('input'));
       setTimeout(()=> pushUser(toSend), 10);
@@ -492,9 +450,10 @@
 
     sendBtn.addEventListener('click', ()=>{ if(!sendBtn.classList.contains('disabled')) send(); });
 
-    /* Files */
-    addBtn.addEventListener('click', ()=>fileInput.click());
-    fileInput.addEventListener('change', async (e)=>{
+    const fileInputEl = document.getElementById('fileInput');
+    const addBtnEl = document.getElementById('addBtn');
+    addBtnEl.addEventListener('click', ()=>fileInputEl.click());
+    fileInputEl.addEventListener('change', async (e)=>{
       const files = Array.from(e.target.files||[]);
       if(!files.length) return;
       const attachments = [];
@@ -508,24 +467,29 @@
     });
     const fileToDataURL = (file)=> new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(file); });
 
-    /* Auth */
-    avatarBtn.addEventListener('click', ()=>{ authModal.style.display='grid'; nameInput.value = state.user?.name || ''; nameInput.focus(); });
-    cancelAuth.addEventListener('click', ()=>authModal.style.display='none');
-    confirmAuth.addEventListener('click', ()=>{
-      const name = nameInput.value.trim() || 'Demo User';
+    const avatarBtnEl = document.getElementById('avatarBtn');
+    const authModalEl = document.getElementById('authModal');
+    const cancelAuthEl = document.getElementById('cancelAuth');
+    const confirmAuthEl = document.getElementById('confirmAuth');
+    const nameInputEl = document.getElementById('nameInput');
+    const avatarImgEl = document.getElementById('avatarImg');
+    const avatarFallbackEl = document.getElementById('avatarFallback');
+
+    avatarBtnEl.addEventListener('click', ()=>{ authModalEl.style.display='grid'; nameInputEl.value = state.user?.name || ''; nameInputEl.focus(); });
+    cancelAuthEl.addEventListener('click', ()=>authModalEl.style.display='none');
+    confirmAuthEl.addEventListener('click', ()=>{
+      const name = nameInputEl.value.trim() || 'Demo User';
       const canvas = document.createElement('canvas'); canvas.width=64; canvas.height=64;
       const ctx = canvas.getContext('2d'); const g = ctx.createLinearGradient(0,0,64,64); g.addColorStop(0,'#22d3ee'); g.addColorStop(1,'#7c3aed'); ctx.fillStyle=g; ctx.fillRect(0,0,64,64);
-      state.user = {name, photo: canvas.toDataURL('image/png')}; save(); updateAvatar(); authModal.style.display='none';
+      state.user = {name, photo: canvas.toDataURL('image/png')}; save(); updateAvatar(); authModalEl.style.display='none';
     });
 
-    /* Init */
     (function init(){
       updateAvatar();
       if(!state.activeId && state.chats.length){ state.activeId = state.chats[0].id; }
       render();
     })();
 
-    /* Export helpers */
     window.monee = {
       reset(){
         localStorage.removeItem('monee_user');
