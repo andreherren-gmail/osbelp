@@ -155,7 +155,7 @@
     <div class="composer-inner">
       <button class="icon-btn" id="addBtn" title="Beleg/Foto">＋</button>
       <input class="hidden-input" id="fileInput" type="file" accept="image/*" multiple capture="environment">
-      <textarea id="input" rows="1" placeholder="Schreibe eine Ausgabe (z.B. „Bäckerei 4.60“) oder einen Befehl (z.B. „Zeige Einträge“)" aria-label="Nachricht"></textarea>
+      <textarea id="input" rows="1" placeholder="Schreibe eine Ausgabe (z.B. „Bäckerei 4.60“) oder einen Befehl (z.B. „Zeige Einträge“)" aria-label="Nachricht" enterkeyhint="send" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
       <!-- Enter = send, Shift+Enter = newline; no send button -->
     </div>
     <small style="display:block;text-align:center;color:var(--muted);margin-top:8px">
@@ -224,14 +224,13 @@
     const emptyState = $('#emptyState');
 
     let inputDisabled = false;
+    let allowNewline = false; // set only when Shift+Enter
+    let pendingSend = false;
 
     /* ---------- Helpers ---------- */
-    const setInputDisabled = (on)=>{
-      inputDisabled = !!on;
-      inputEl.disabled = on;
-    };
-    const focusComposer = ()=>{ if(!inputDisabled){ inputEl.focus(); setTimeout(()=>inputEl.focus(),0); } };
     const ensureScroll = ()=>{ chatScroller.scrollTop = chatScroller.scrollHeight; };
+    const setInputDisabled = (on)=>{ inputDisabled = !!on; inputEl.disabled = on; };
+    const focusComposer = ()=>{ if(!inputDisabled){ inputEl.focus(); setTimeout(()=>inputEl.focus(),0); } };
 
     const updateAvatar = ()=>{
       if(state.user && state.user.photo){
@@ -460,27 +459,53 @@
       return `Summe der gespeicherten Einträge: **CHF ${sum.toFixed(2)}** (${arr.length}/10 Einträge).`;
     }
 
-    /* ---------- Composer ---------- */
-    inputEl.addEventListener('input', ()=>{
-      inputEl.style.height = 'auto';
-      inputEl.style.height = Math.min(inputEl.scrollHeight, window.innerHeight*0.28) + 'px';
-    });
-    const send = ()=>{
-      const val = inputEl.value.trim();
-      if(!val || inputDisabled) return;
-      setInputDisabled(true);
-      const toSend = inputEl.value; // keep exact (with newlines)
-      inputEl.value='';
-      inputEl.dispatchEvent(new Event('input'));
-      setTimeout(()=> pushUser(toSend), 10);
-    };
+    /* ---------- Composer (newline & iOS guard) ---------- */
+    // Guard A: keydown — detect Enter (incl. legacy keyCode) and send unless Shift
     inputEl.addEventListener('keydown', (e)=>{
-      if(e.key==='Enter'){
-        if(e.shiftKey) return;
+      const isEnter = e.key === 'Enter' || e.keyCode === 13;
+      if(isEnter){
+        if(e.shiftKey){ allowNewline = true; return; }
+        allowNewline = false;
+        e.preventDefault();
+        pendingSend = true;
+      }
+    });
+    // Guard B: beforeinput — iOS inserts 'insertLineBreak' or 'insertParagraph'
+    inputEl.addEventListener('beforeinput', (e)=>{
+      const t = e.inputType;
+      if((t === 'insertParagraph' || t === 'insertLineBreak') && !allowNewline){
         e.preventDefault();
         send();
       }
     });
+    // Guard C: input — ultimate fallback if newline sneaks in
+    inputEl.addEventListener('input', ()=>{
+      // auto-grow
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, window.innerHeight*0.28) + 'px';
+      if(!allowNewline && inputEl.value.includes('\n')){
+        inputEl.value = inputEl.value.replace(/\n+/g,' ').trim();
+        send();
+      }
+      if(pendingSend){
+        pendingSend = false;
+        send();
+      }
+    });
+    // Guard D: keyup — reset allowance
+    inputEl.addEventListener('keyup', (e)=>{
+      if(e.key==='Enter' || e.keyCode === 13){ allowNewline = false; }
+    });
+
+    const send = ()=>{
+      const val = inputEl.value.trim();
+      if(!val || inputDisabled) return;
+      setInputDisabled(true);
+      const toSend = inputEl.value; // preserve exact content
+      inputEl.value='';
+      inputEl.dispatchEvent(new Event('input'));
+      setTimeout(()=> pushUser(toSend), 10);
+    };
 
     /* ---------- Files ---------- */
     addBtn.addEventListener('click', ()=>fileInput.click());
