@@ -8,8 +8,6 @@
   <style>
     :root{
       --bg:#0b0f17;
-      --layer:#0a0f1a;
-      --panel:#0f172a;
       --text:#e5e7eb;
       --muted:#9ca3af;
       --brand:#22d3ee;
@@ -17,29 +15,17 @@
       --bubble-ai:#0b1220;
       --ring:#22d3ee55;
       --border:#1f2937;
-      --shadow:0 8px 24px rgba(0,0,0,.25);
       --money:#22c55e;
       --accent:#22d3ee;
+      --chip:#0e1a2b;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-      background:linear-gradient(180deg,var(--bg),#0a0f1a 40%, var(--bg) 100%);
-      color:var(--text);
-    }
-    .appbar{
-      position:sticky; top:0; z-index:40;
-      display:flex; align-items:center; justify-content:space-between; gap:8px;
-      padding:10px 12px env(safe-area-inset-top) 10px;
-      background:rgba(9,13,20,.7); backdrop-filter:saturate(140%) blur(10px);
-      border-bottom:1px solid #121826;
-    }
-    .brand{display:flex; align-items:center; gap:10px}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#0a0f1a 40%, var(--bg) 100%);color:var(--text)}
+    .appbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px env(safe-area-inset-top) 10px;background:rgba(9,13,20,.7);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid #121826}
+    .brand{display:flex;align-items:center;gap:10px}
     .brand .logo{width:26px;height:26px;border-radius:8px;background:radial-gradient(120% 120% at 0% 0%, var(--brand), #60a5fa 60%, #7c3aed)}
-    .brand .title{font-weight:700;letter-spacing:.2px}
     .pill{font-size:12px;color:var(--muted);padding:2px 8px;border:1px solid #223045;border-radius:999px}
-    .actions{display:flex; align-items:center; gap:8px}
     .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0d1524;color:var(--text);padding:8px 10px;border-radius:12px;cursor:pointer}
     .btn.ghost{background:transparent}
     .avatar{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;background:#0c1426;overflow:hidden}
@@ -55,13 +41,15 @@
     .chat{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:12px 12px 120px}
     .container{max-width:760px;margin:0 auto}
     .msg{display:flex;gap:10px;margin:12px 0}
-    .msg .bubble{padding:12px 14px;border-radius:16px;border:1px solid var(--border);line-height:1.55}
+    .bubble{padding:12px 14px;border-radius:16px;border:1px solid var(--border);line-height:1.55}
     .msg.user .bubble{background:var(--bubble-user)}
     .msg.ai .bubble{background:var(--bubble-ai)}
     .meta{font-size:12px;color:var(--muted);margin-top:6px}
     .attachments{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .attachment{width:88px;height:88px;border-radius:10px;border:1px solid #253146;overflow:hidden;background:#0c1426;display:grid;place-items:center}
     .attachment img{width:100%;height:100%;object-fit:cover}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid #1f2d44;background:var(--chip);font-size:12px;color:#c8e3ff}
+    .chip-dot{width:8px;height:8px;border-radius:50%}
     .empty{margin:12vh auto 0;max-width:640px;text-align:center;color:var(--muted)}
     .empty h2{color:#e5e7eb;font-size:20px;margin:0 0 8px}
     .tips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
@@ -84,6 +72,9 @@
     .dollar:nth-child(2){animation-delay:.15s}
     .dollar:nth-child(3){animation-delay:.3s}
     @keyframes blink{0%,100%{opacity:.2; transform:translateY(0) scale(1)}50%{opacity:1; transform:translateY(-2px) scale(1.06)}}
+    /* SVG in bubble responsive */
+    .chart-wrap{margin-top:10px;border:1px solid #1b2740;border-radius:12px;overflow:hidden;background:#0b1220}
+    .bubble svg{max-width:100%;height:auto;display:block}
   </style>
 </head>
 <body>
@@ -120,12 +111,12 @@
       <div class="container" id="chatContainer">
         <div class="empty" id="emptyState">
           <h2>Neues Budget im Chat starten</h2>
-          <p>Gib z.B. ein: <em>„Migros 18.40“</em> oder lade einen Beleg über <strong>＋</strong> hoch.</p>
+          <p>Gib z.B. ein: <em>„Migros 18.40 #Lebensmittel“</em> oder lade einen Beleg über <strong>＋</strong> hoch.</p>
           <div class="tips">
-            <div class="tip">„Zeige Einträge“ – listet die letzten 10</div>
-            <div class="tip">„Summe“ – Summe der gespeicherten Einträge</div>
-            <div class="tip">„Zeige Eintrag 3“ – Detail</div>
-            <div class="tip">„Lösche Eintrag 2“ – entfernt Nummer 2</div>
+            <div class="tip">„Summe nach Kategorie“ – Gruppensumme</div>
+            <div class="tip">„Ausgaben Oktober [2025]“ – Monatsreport + Chart</div>
+            <div class="tip">„Setze Kategorie 3 Mobilität“ – Eintrag 3 umhängen</div>
+            <div class="tip">„Zeige Kategorien“ – Liste der Kategorien</div>
           </div>
         </div>
       </div>
@@ -136,7 +127,7 @@
     <div class="composer-inner">
       <button class="icon-btn" id="addBtn" title="Beleg/Foto">＋</button>
       <input class="hidden-input" id="fileInput" type="file" accept="image/*" multiple capture="environment">
-      <textarea id="input" rows="1" placeholder="Schreibe eine Ausgabe (z.B. „Bäckerei 4.60“) oder einen Befehl (z.B. „Zeige Einträge“)" aria-label="Nachricht" enterkeyhint="newline" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+      <textarea id="input" rows="1" placeholder="Schreibe eine Ausgabe (z.B. „Bäckerei 4.60 #Food“), oder „Ausgaben Oktober“" aria-label="Nachricht" enterkeyhint="newline" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
       <button id="sendBtn" class="send-btn" title="Senden" aria-label="Senden"><span class="send-icon">➤</span></button>
     </div>
     <small style="display:block;text-align:center;color:var(--muted);margin-top:8px">
@@ -164,13 +155,13 @@
 
     const state = {
       user: JSON.parse(localStorage.getItem('monee_user')||'null'),
-      chats: JSON.parse(localStorage.getItem('monee_chats_v2')||'[]'),
+      chats: JSON.parse(localStorage.getItem('monee_chats_v3')||'[]'),
       activeId: localStorage.getItem('monee_active') || null
     };
 
     const save = ()=>{
       localStorage.setItem('monee_user', JSON.stringify(state.user));
-      localStorage.setItem('monee_chats_v2', JSON.stringify(state.chats));
+      localStorage.setItem('monee_chats_v3', JSON.stringify(state.chats));
       localStorage.setItem('monee_active', state.activeId||'');
     };
     const uid = ()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
@@ -179,6 +170,19 @@
     const escapeHTML = (s)=> s.replace(/[&<>\"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[m]));
     const autolink = (s)=> s.replace(/(https?:\/\/[^\s)]+)|(CHF\s*\d+(?:[\.,]\d{2})?|\d+(?:[\.,]\d{2})?\s*CHF)/gi, '<u>$1$2</u>');
 
+    const COLORS = ['#22d3ee','#60a5fa','#a78bfa','#f472b6','#34d399','#fbbf24','#f87171','#c084fc','#4ade80','#93c5fd'];
+    const CAT_KEYWORDS = {
+      'lebensmittel':['migros','coop','aldi','lidl','denner','volg','spar','lebensmittel','food','bäckerei','boulangerie'],
+      'mobilität':['sbb','övn','öV','bus','tram','tank','benzin','diesel','tanken','parking','parkhaus','parkgebühr','velo','e-auto','autobahnvignette'],
+      'essen & trinken':['restaurant','café','cafe','bar','mittag','dinner','takeaway','kebab','pizza','mc','bk','starbucks'],
+      'wohnen':['miete','nebenkosten','strom','gas','heizung','internet','swisscom','salt','sunrise','wasser','abfall'],
+      'freizeit':['kino','freizeit','musee','museen','sport','wellness','bad','schwimmbad','fitness','abo'],
+      'gesundheit':['apotheke','arzt','zahnarzt','medik'],
+      'kinder':['schule','kita','spielzeug','windeln','kinder','familie'],
+      'sonstiges':['diverses','sonstiges','andere','misc']
+    };
+
+    // UI refs
     const chatContainer = $('#chatContainer');
     const chatScroller = document.querySelector('.chat');
     const inputEl = $('#input');
@@ -224,6 +228,7 @@
       }
     };
 
+    /* Drawer render */
     const renderDrawer = ()=>{
       chatList.innerHTML = '';
       if(state.chats.length===0){
@@ -261,18 +266,20 @@
     openDrawer.addEventListener('click', ()=>{drawer.classList.add('open'); renderDrawer()});
     closeDrawer.addEventListener('click', ()=>drawer.classList.remove('open'));
 
+    /* Chats */
     const newChat = ()=>{
       const id = uid();
       state.chats.push({id, title:'', createdAt:Date.now(), msgs:[], entries:[], receipts:[]});
       state.activeId = id;
       save(); render(); focusComposer();
-      pushAIWithTyping("Willkommen! Neues Budget erstellt. Füge Ausgaben wie *„Migros 18.40“* hinzu. Maximal 10 Einträge werden gespeichert. Tippe **Hilfe** für Befehle.");
+      pushAIWithTyping("Willkommen! Neues Budget erstellt. Füge Ausgaben wie *„Migros 18.40 #Lebensmittel“* hinzu. Tippe **Hilfe** für Befehle.");
     };
     const openChat = (id)=>{ state.activeId = id; save(); render(); };
 
     newChatBtn.addEventListener('click', newChat);
     newChatBtn2.addEventListener('click', newChat);
 
+    /* Render messages */
     const render = ()=>{
       const chat = activeChat();
       chatContainer.innerHTML='';
@@ -289,7 +296,7 @@
           row.innerHTML = ''
             + '<div class="avatar" style="width:28px;height:28px">' + (m.role==='user'?(state.user?.name?.[0]?.toUpperCase()||'🧑'):'🤖') + '</div>'
             + '<div style="flex:1">'
-            +   '<div class="bubble">' + autolink(escapeHTML(m.text)).replace(/\n/g,'<br>') + '</div>'
+            +   '<div class="bubble">' + decorateMessageHTML(m.text) + '</div>'
             +   '<div class="meta">' + fmtDate(m.ts) + '</div>'
             +   attachmentsHTML
             + '</div>';
@@ -303,6 +310,13 @@
       ensureScroll();
     };
 
+    function decorateMessageHTML(text){
+      // Allow simple placeholders for injected SVG (already html). Otherwise escape & link.
+      const isHTML = text.startsWith('<svg') || text.startsWith('<div class="chart-wrap"');
+      if(isHTML) return text;
+      return autolink(escapeHTML(text)).replace(/\\n/g,'<br>');
+    }
+
     const pushUser = (text, attachments=[])=>{
       const chat = activeChat(); if(!chat){ newChat(); return pushUser(text,attachments); }
       chat.msgs.push({role:'user', text, ts:Date.now(), attachments});
@@ -314,6 +328,7 @@
       chat.msgs.push({role:'ai', text, ts:Date.now()}); save(); render();
     };
 
+    /* Typing */
     function showTyping(){
       const row = document.createElement('div');
       row.className = 'msg ai typing';
@@ -338,6 +353,23 @@
       }, delay);
     }
 
+    /* Parsing helpers */
+    function parseCategoryFromText(t){
+      // match trailing #Kategorie or [Kategorie]
+      const hash = t.match(/#([A-Za-zÄÖÜäöüß &]+)\s*$/);
+      if(hash){ return hash[1].trim(); }
+      const br = t.match(/\[([^\]]+)\]\s*$/);
+      if(br){ return br[1].trim(); }
+      // keyword-based guess
+      const low = t.toLowerCase();
+      for(const cat in CAT_KEYWORDS){
+        if(CAT_KEYWORDS[cat].some(k=> low.includes(k))) return titleCase(cat);
+      }
+      return 'Sonstiges';
+    }
+    function titleCase(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+    /* Commands & Entries */
     function handleCommandOrEntry(text){
       const t = text.trim();
       const low = t.toLowerCase();
@@ -346,65 +378,83 @@
       const mDelete = low.match(/^l[öo]sche eintrag\s+(\d+)/);
       const mSum = low.match(/^summe(?:\s+(monat|woche))?/);
       const mHelp = low.match(/^hilfe$/);
+      const mCats = low.match(/^zeige kategorien$/);
+      const mSumCat = low.match(/^summe nach kategorien?|kategorien?\s*summe$/);
+      const mSetCat = low.match(/^setze kategorie\s+(\d+)\s+(.+)$/);
+      const mMonth = low.match(/^ausgaben\s+([a-zäöü\.]+)(?:\s+(\d{4}))?/);
 
       if(mHelp){ return pushAIWithTyping(helpText()); }
-      if(mShow){
-        const n = parseInt(mShow[1]||'10',10);
-        return pushAIWithTyping(renderEntries(n));
-      }
-      if(mShowOne){
-        const idx = parseInt(mShowOne[1],10);
-        return pushAIWithTyping(renderEntry(idx));
-      }
-      if(mDelete){
-        const idx = parseInt(mDelete[1],10);
-        return pushAIWithTyping(deleteEntry(idx));
-      }
-      if(mSum){
-        return pushAIWithTyping(sumEntries());
+      if(mShow){ const n = parseInt(mShow[1]||'10',10); return pushAIWithTyping(renderEntries(n)); }
+      if(mShowOne){ const idx = parseInt(mShowOne[1],10); return pushAIWithTyping(renderEntry(idx)); }
+      if(mDelete){ const idx = parseInt(mDelete[1],10); return pushAIWithTyping(deleteEntry(idx)); }
+      if(mSum){ return pushAIWithTyping(sumEntries()); }
+      if(mCats){ return pushAIWithTyping(listCategories()); }
+      if(mSumCat){ return pushAIWithTyping(sumByCategory()); }
+      if(mSetCat){ const idx=parseInt(mSetCat[1],10); const cat=titleCase(mSetCat[2].trim()); return pushAIWithTyping(setCategory(idx,cat)); }
+      if(mMonth){
+        const mName = mMonth[1]; const year = mMonth[2]? parseInt(mMonth[2],10): (new Date()).getFullYear();
+        const mi = monthIndexFromGerman(mName);
+        if(mi===-1) return pushAIWithTyping('Monat nicht erkannt. Beispiel: **Ausgaben Oktober 2025**');
+        return renderMonthSummary(mi, year);
       }
 
+      // Else: as entry
       const amountMatch = t.match(/(\d+[.,]\d{1,2}|\d+)/);
       const amount = amountMatch ? parseFloat(amountMatch[1].replace(',','.')) : NaN;
       if(!isNaN(amount)){
-        const label = t.replace(amountMatch[1], '').trim() || 'Ausgabe';
-        return addEntry(label, amount);
+        const label = t.replace(amountMatch[1], '').replace(/\s*(#.+|\[[^\]]+\])\s*$/,'').trim() || 'Ausgabe';
+        const category = titleCase(parseCategoryFromText(t));
+        return addEntry(label, amount, category);
       }
-      return pushAIWithTyping('Verstanden. (Befehl oder Betrag nicht erkannt – tippe **Hilfe** für Beispiele)');
+      return pushAIWithTyping('Verstanden. (Befehl/Betrag nicht erkannt – tippe **Hilfe** für Beispiele)');
     }
 
     function helpText(){
       return [
         'Befehle:',
-        '• **Zeige Einträge** – listet die gespeicherten Einträge (max. 10)',
-        '• **Zeige Einträge 5** – zeigt die letzten 5',
-        '• **Zeige Eintrag 3** – Detailansicht des dritten Eintrags',
-        '• **Lösche Eintrag 2** – entfernt den zweiten Eintrag',
-        '• **Summe** – Summe aller gespeicherten Einträge',
+        '• **Zeige Einträge [N]** – listet die gespeicherten Einträge',
+        '• **Zeige Eintrag N** – Detailansicht eines Eintrags',
+        '• **Lösche Eintrag N** – entfernt den Eintrag',
+        '• **Summe** – Gesamtsumme aller Einträge',
+        '• **Zeige Kategorien** – Liste verwendeter Kategorien',
+        '• **Summe nach Kategorie** – Gruppensumme',
+        '• **Setze Kategorie N <Name>** – Kategorie zuweisen',
+        '• **Ausgaben Oktober [2025]** – Monatsreport + Mini-Chart',
         '',
-        'Ausgabe hinzufügen: *„Migros 18.40“*, *„Bäckerei 4.60“*'
-      ].join('\n');
+        'Ausgabe hinzufügen: *„Migros 18.40 #Lebensmittel“* oder *„SBB 8.40 [Mobilität]“*'
+      ].join('\\n');
     }
 
-    function addEntry(label, amount){
+    function addEntry(label, amount, category){
       const chat = activeChat(); if(!chat) return;
       chat.entries = chat.entries || [];
-      const entry = { id: uid(), ts: Date.now(), label, amount };
+      const entry = { id: uid(), ts: Date.now(), label, amount, category };
       chat.entries.push(entry);
       if(chat.entries.length>10){ chat.entries = chat.entries.slice(-10); }
       save();
       const left = 10 - chat.entries.length;
-      pushAIWithTyping('Notiert: **' + escapeHTML(label) + ' – CHF ' + amount.toFixed(2) + '**.\nEs sind jetzt **' + chat.entries.length + '/10** Einträge gespeichert.' + (left?(' (noch ' + left + ' frei)'):'') );
+      const chip = renderChip(category);
+      pushAIWithTyping(`Notiert: **${escapeHTML(label)} – CHF ${amount.toFixed(2)}** ${chip}\\nEs sind jetzt **${chat.entries.length}/10** Einträge gespeichert.${left?` (noch ${left} frei)`:''}`);
       render();
     }
+
+    function renderChip(cat){
+      const color = colorForCategory(cat);
+      return `<span class="chip"><span class="chip-dot" style="background:${color}"></span>${escapeHTML(cat)}</span>`;
+    }
+    function colorForCategory(cat){
+      const idx = Math.abs(hashCode(cat)) % COLORS.length;
+      return COLORS[idx];
+    }
+    function hashCode(s){ let h=0; for(let i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; } return h; }
 
     function renderEntries(n=10){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = (chat.entries||[]).slice(-n);
-      if(arr.length===0) return 'Keine Einträge vorhanden. Füge z.B. *„Migros 18.40“* hinzu.';
-      let out = 'Letzte Einträge:\n';
+      if(arr.length===0) return 'Keine Einträge vorhanden. Füge z.B. *„Migros 18.40 #Lebensmittel“* hinzu.';
+      let out = 'Letzte Einträge:\\n';
       arr.forEach((e,i)=>{
-        out += (i+1)+'. '+e.label+' – CHF '+e.amount.toFixed(2)+' ('+fmtDate(e.ts)+')\n';
+        out += `${i+1}. ${e.label} – CHF ${e.amount.toFixed(2)} [${e.category}] (${fmtDate(e.ts)})\\n`;
       });
       return out.trim();
     }
@@ -412,27 +462,121 @@
     function renderEntry(idx){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = chat.entries||[];
-      if(idx<1 || idx>arr.length) return 'Eintrag '+idx+' existiert nicht (1..'+arr.length+').';
+      if(idx<1 || idx>arr.length) return `Eintrag ${idx} existiert nicht (1..${arr.length}).`;
       const e = arr[idx-1];
-      return 'Eintrag '+idx+': **'+e.label+'** – **CHF '+e.amount.toFixed(2)+'**\nDatum: '+fmtDate(e.ts);
+      return `Eintrag ${idx}: **${e.label}** – **CHF ${e.amount.toFixed(2)}**\\nKategorie: ${e.category}\\nDatum: ${fmtDate(e.ts)}`;
     }
 
     function deleteEntry(idx){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = chat.entries||[];
-      if(idx<1 || idx>arr.length) return 'Eintrag '+idx+' existiert nicht (1..'+arr.length+').';
-      const removed = arr.splice(idx-1,1)[0];
+      if(idx<1 || idx>arr.length) return `Eintrag ${idx} existiert nicht (1..${arr.length}).`;
+      const [removed] = arr.splice(idx-1,1);
       save(); render();
-      return 'Gelöscht: '+removed.label+' – CHF '+removed.amount.toFixed(2)+'. Jetzt '+((arr||[]).length)+'/10 Einträge.';
+      return `Gelöscht: ${removed.label} – CHF ${removed.amount.toFixed(2)} (${removed.category}). Jetzt ${(arr||[]).length}/10 Einträge.`;
     }
 
     function sumEntries(){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = chat.entries||[];
       const sum = arr.reduce((s,e)=>s+Number(e.amount||0),0);
-      return 'Summe der gespeicherten Einträge: **CHF '+sum.toFixed(2)+'** ('+(arr.length)+'/10 Einträge).';
+      return `Summe der gespeicherten Einträge: **CHF ${sum.toFixed(2)}** (${arr.length}/10 Einträge).`;
     }
 
+    function listCategories(){
+      const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
+      const arr = chat.entries||[];
+      const cats = [...new Set(arr.map(e=>e.category))];
+      if(cats.length===0) return 'Noch keine Kategorien.';
+      return 'Kategorien: ' + cats.map(c=>c).join(', ');
+    }
+
+    function sumByCategory(){
+      const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
+      const arr = chat.entries||[];
+      if(arr.length===0) return 'Keine Einträge vorhanden.';
+      const map = {};
+      arr.forEach(e=> map[e.category] = (map[e.category]||0) + Number(e.amount||0));
+      const lines = Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}: CHF ${v.toFixed(2)}`);
+      return 'Summe nach Kategorie:\\n' + lines.join('\\n');
+    }
+
+    function setCategory(idx, cat){
+      const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
+      const arr = chat.entries||[];
+      if(idx<1 || idx>arr.length) return `Eintrag ${idx} existiert nicht (1..${arr.length}).`;
+      arr[idx-1].category = cat;
+      save(); render();
+      return `Kategorie gesetzt: Eintrag ${idx} → ${cat}.`;
+    }
+
+    /* Month parsing + summary */
+    function monthIndexFromGerman(s){
+      const m = {
+        'jan':0,'januar':0,
+        'feb':1,'februar':1,
+        'mär':2,'maerz':2,'märz':2,
+        'apr':3,'april':3,
+        'mai':4,
+        'jun':5,'juni':5,
+        'jul':6,'juli':6,
+        'aug':7,'august':7,
+        'sep':8,'sept':8,'september':8,
+        'okt':9,'oktober':9,
+        'nov':10,'november':10,
+        'dez':11,'dezember':11
+      };
+      const k = s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace('.', '');
+      return (k in m) ? m[k] : -1;
+    }
+
+    function renderMonthSummary(monthIdx, year){
+      const chat = activeChat(); if(!chat) return pushAIWithTyping('Kein aktives Budget.');
+      const arr = (chat.entries||[]).filter(e=>{
+        const d = new Date(e.ts);
+        return d.getMonth()===monthIdx && d.getFullYear()===year;
+      });
+      if(arr.length===0) return pushAIWithTyping('Keine Einträge für diesen Monat.');
+      const map = {};
+      let sum = 0;
+      arr.forEach(e=>{ map[e.category]=(map[e.category]||0)+Number(e.amount||0); sum+=Number(e.amount||0); });
+      const items = Object.entries(map).sort((a,b)=>b[1]-a[1]);
+      const lines = items.map(([k,v])=>`${k}: CHF ${v.toFixed(2)}`);
+      const title = `Ausgaben ${monthNameDE(monthIdx)} ${year}: **CHF ${sum.toFixed(2)}**`;
+      pushAIWithTyping(title + '\\n' + lines.join('\\n'), 400);
+      setTimeout(()=>{
+        const svg = buildBarChartSVG(items);
+        pushAI(svg);
+      }, 450);
+    }
+
+    function monthNameDE(i){
+      return ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'][i]||'';
+    }
+
+    function buildBarChartSVG(items){
+      const max = Math.max(...items.map(i=>i[1]));
+      const width = 640, padding = 14, barH = 28, gap = 10;
+      const h = padding*2 + items.length*barH + (items.length-1)*gap + 30;
+      let y = padding + 20;
+      const parts = [];
+      parts.push(`<div class="chart-wrap"><svg viewBox="0 0 ${width} ${h}" role="img" aria-label="Kategorie-Chart">`);
+      parts.push(`<rect x="0" y="0" width="${width}" height="${h}" fill="#0b1220"/>`);
+      parts.push(`<text x="${padding}" y="${padding+12}" fill="#9fb3d1" font-size="12">Ausgaben nach Kategorie</text>`);
+      items.forEach(([k,v],idx)=>{
+        const w = Math.max(4, Math.round((v/max)*(width - padding*2 - 80)));
+        const x = padding + 80; // left label area
+        const color = colorForCategory(k);
+        parts.push(`<text x="${padding}" y="${y+18}" fill="#c8e3ff" font-size="12">${escapeHTML(k)}</text>`);
+        parts.push(`<rect x="${x}" y="${y}" rx="6" ry="6" width="${w}" height="${barH}" fill="${color}" opacity="0.9"/>`);
+        parts.push(`<text x="${x+w+6}" y="${y+18}" fill="#9fb3d1" font-size="12">CHF ${v.toFixed(2)}</text>`);
+        y += barH + gap;
+      });
+      parts.push(`</svg></div>`);
+      return parts.join('');
+    }
+
+    /* Composer */
     inputEl.addEventListener('input', ()=>{
       inputEl.style.height = 'auto';
       inputEl.style.height = Math.min(inputEl.scrollHeight, window.innerHeight*0.28) + 'px';
@@ -447,13 +591,11 @@
       inputEl.dispatchEvent(new Event('input'));
       setTimeout(()=> pushUser(toSend), 10);
     };
-
     sendBtn.addEventListener('click', ()=>{ if(!sendBtn.classList.contains('disabled')) send(); });
 
-    const fileInputEl = document.getElementById('fileInput');
-    const addBtnEl = document.getElementById('addBtn');
-    addBtnEl.addEventListener('click', ()=>fileInputEl.click());
-    fileInputEl.addEventListener('change', async (e)=>{
+    /* Files */
+    addBtn.addEventListener('click', ()=>fileInput.click());
+    fileInput.addEventListener('change', async (e)=>{
       const files = Array.from(e.target.files||[]);
       if(!files.length) return;
       const attachments = [];
@@ -467,33 +609,28 @@
     });
     const fileToDataURL = (file)=> new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(file); });
 
-    const avatarBtnEl = document.getElementById('avatarBtn');
-    const authModalEl = document.getElementById('authModal');
-    const cancelAuthEl = document.getElementById('cancelAuth');
-    const confirmAuthEl = document.getElementById('confirmAuth');
-    const nameInputEl = document.getElementById('nameInput');
-    const avatarImgEl = document.getElementById('avatarImg');
-    const avatarFallbackEl = document.getElementById('avatarFallback');
-
-    avatarBtnEl.addEventListener('click', ()=>{ authModalEl.style.display='grid'; nameInputEl.value = state.user?.name || ''; nameInputEl.focus(); });
-    cancelAuthEl.addEventListener('click', ()=>authModalEl.style.display='none');
-    confirmAuthEl.addEventListener('click', ()=>{
-      const name = nameInputEl.value.trim() || 'Demo User';
+    /* Auth */
+    avatarBtn.addEventListener('click', ()=>{ authModal.style.display='grid'; nameInput.value = state.user?.name || ''; nameInput.focus(); });
+    cancelAuth.addEventListener('click', ()=>authModal.style.display='none');
+    confirmAuth.addEventListener('click', ()=>{
+      const name = nameInput.value.trim() || 'Demo User';
       const canvas = document.createElement('canvas'); canvas.width=64; canvas.height=64;
       const ctx = canvas.getContext('2d'); const g = ctx.createLinearGradient(0,0,64,64); g.addColorStop(0,'#22d3ee'); g.addColorStop(1,'#7c3aed'); ctx.fillStyle=g; ctx.fillRect(0,0,64,64);
-      state.user = {name, photo: canvas.toDataURL('image/png')}; save(); updateAvatar(); authModalEl.style.display='none';
+      state.user = {name, photo: canvas.toDataURL('image/png')}; save(); updateAvatar(); authModal.style.display='none';
     });
 
+    /* Init */
     (function init(){
       updateAvatar();
       if(!state.activeId && state.chats.length){ state.activeId = state.chats[0].id; }
       render();
     })();
 
+    /* Export helpers */
     window.monee = {
       reset(){
         localStorage.removeItem('monee_user');
-        localStorage.removeItem('monee_chats_v2');
+        localStorage.removeItem('monee_chats_v3');
         localStorage.removeItem('monee_active');
         location.reload();
       },
