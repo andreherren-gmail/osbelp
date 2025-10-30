@@ -27,40 +27,25 @@
       background:linear-gradient(180deg,var(--bg),#0a0f1a 40%, var(--bg) 100%);
       color:var(--text);
     }
-    /* Appbar */
-    .appbar{
-      position:sticky; top:0; z-index:40;
-      display:flex; align-items:center; justify-content:space-between; gap:8px;
-      padding:10px 12px env(safe-area-inset-top) 10px;
-      background:rgba(9,13,20,.7); backdrop-filter:saturate(140%) blur(10px);
-      border-bottom:1px solid #121826;
-    }
-    .brand{display:flex; align-items:center; gap:10px}
+    .appbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px env(safe-area-inset-top) 10px;background:rgba(9,13,20,.7);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid #121826}
+    .brand{display:flex;align-items:center;gap:10px}
     .brand .logo{width:26px;height:26px;border-radius:8px;background:radial-gradient(120% 120% at 0% 0%, var(--brand), #60a5fa 60%, #7c3aed)}
     .brand .title{font-weight:700;letter-spacing:.2px}
     .pill{font-size:12px;color:var(--muted);padding:2px 8px;border:1px solid #223045;border-radius:999px}
-    .actions{display:flex; align-items:center; gap:8px}
+    .actions{display:flex;align-items:center;gap:8px}
     .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0d1524;color:var(--text);padding:8px 10px;border-radius:12px;cursor:pointer}
     .btn.ghost{background:transparent}
     .avatar{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;background:#0c1426;overflow:hidden}
     .avatar img{width:100%;height:100%;object-fit:cover}
-    /* Drawer */
-    .drawer{
-      position:fixed; inset:0 auto 0 0; width:min(86%,360px); background:#0b1220; border-right:1px solid #141c2e;
-      transform:translateX(-100%); transition:.25s transform ease; z-index:60; display:flex; flex-direction:column;
-    }
+    .drawer{position:fixed;inset:0 auto 0 0;width:min(86%,360px);background:#0b1220;border-right:1px solid #141c2e;transform:translateX(-100%);transition:.25s transform ease;z-index:60;display:flex;flex-direction:column}
     .drawer.open{transform:translateX(0)}
     .drawer-header{padding:14px;border-bottom:1px solid #141c2e;display:flex;align-items:center;justify-content:space-between}
     .drawer-list{overflow:auto;-webkit-overflow-scrolling:touch;padding:8px 8px 96px}
     .chat-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;border:1px solid transparent}
     .chat-item:hover{background:#0f172a;border-color:#1f2937}
     .chat-item.active{background:#0f172a;border-color:#283245}
-    /* Main chat column */
     .wrap{min-height:100%;display:flex;flex-direction:column}
-    .chat{
-      flex:1; overflow:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;
-      padding:12px 12px 120px;
-    }
+    .chat{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:12px 12px 120px}
     .container{max-width:760px;margin:0 auto}
     .msg{display:flex;gap:10px;margin:12px 0}
     .msg .bubble{padding:12px 14px;border-radius:16px;border:1px solid var(--border);line-height:1.55}
@@ -70,30 +55,20 @@
     .attachments{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
     .attachment{width:88px;height:88px;border-radius:10px;border:1px solid #253146;overflow:hidden;background:#0c1426;display:grid;place-items:center}
     .attachment img{width:100%;height:100%;object-fit:cover}
-    /* Empty */
     .empty{margin:12vh auto 0;max-width:640px;text-align:center;color:var(--muted)}
     .empty h2{color:#e5e7eb;font-size:20px;margin:0 0 8px}
     .tips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
     .tip{padding:10px;border:1px dashed #263245;border-radius:12px;color:#cbd5e1;background:linear-gradient(180deg,#0d1526,#0a101c)}
     @media(min-width:720px){.tips{grid-template-columns:repeat(4,1fr)}}
-    /* Composer */
-    .composer{
-      position:fixed;left:0;right:0;bottom:0;z-index:40;
-      padding:12px 12px calc(12px + env(safe-area-inset-bottom));
-      background:linear-gradient(180deg, rgba(10,14,22,0), rgba(10,14,22,.85) 30%, rgba(10,14,22,.95));
-      display:grid;place-items:center;
-    }
-    .composer-inner{
-      width:100%;max-width:780px;display:flex;align-items:flex-end;gap:8px;
-      background:#0c1426;border:1px solid var(--border);border-radius:20px;padding:8px;
-      box-shadow:0 0 0 2px transparent;transition:.15s box-shadow ease,.15s border-color ease;
-    }
+    .composer{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:12px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg, rgba(10,14,22,0), rgba(10,14,22,.85) 30%, rgba(10,14,22,.95));display:grid;place-items:center}
+    .composer-inner{width:100%;max-width:780px;display:flex;align-items:flex-end;gap:8px;background:#0c1426;border:1px solid var(--border);border-radius:20px;padding:8px;box-shadow:0 0 0 2px transparent;transition:.15s box-shadow ease,.15s border-color ease}
     .composer-inner:focus-within{box-shadow:0 0 0 2px var(--ring)}
     .icon-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid #1e293b;background:#0a1222;cursor:pointer}
     .hidden-input{display:none}
-    textarea{flex:1;resize:none;max-height:28vh;min-height:40px;background:transparent;border:none;color:var(--text);font-size:15px;line-height:1.5;outline:none;padding:8px 6px}
-    textarea:disabled{opacity:.6;cursor:not-allowed}
-    /* Typing indicator */
+    textarea, .ce{flex:1;max-height:28vh;min-height:40px;background:transparent;border:none;color:var(--text);font-size:15px;line-height:1.5;outline:none;padding:8px 6px}
+    textarea{resize:none}
+    textarea:disabled, .ce.disabled{opacity:.6;cursor:not-allowed}
+    .ce{display:none;white-space:pre-wrap;overflow-wrap:break-word}
     .typing .bubble{display:inline-flex;gap:8px;align-items:center}
     .dollar{display:inline-block;font-weight:700;color:var(--money);opacity:.2;transform:translateY(0) scale(1);animation:blink .9s infinite}
     .dollar:nth-child(2){animation-delay:.15s}
@@ -102,7 +77,6 @@
   </style>
 </head>
 <body>
-  <!-- Drawer -->
   <aside class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer-header">
       <strong>Budgets</strong>
@@ -114,7 +88,6 @@
     </div>
   </aside>
 
-  <!-- App Bar -->
   <header class="appbar">
     <div class="brand">
       <button class="btn ghost" id="openDrawer" aria-label="Budgets"><span>≡</span></button>
@@ -132,7 +105,6 @@
     </div>
   </header>
 
-  <!-- Main -->
   <main class="wrap">
     <section class="chat">
       <div class="container" id="chatContainer">
@@ -150,20 +122,18 @@
     </section>
   </main>
 
-  <!-- Composer -->
   <div class="composer">
     <div class="composer-inner">
       <button class="icon-btn" id="addBtn" title="Beleg/Foto">＋</button>
       <input class="hidden-input" id="fileInput" type="file" accept="image/*" multiple capture="environment">
-      <textarea id="input" rows="1" placeholder="Schreibe eine Ausgabe (z.B. „Bäckerei 4.60“) oder einen Befehl (z.B. „Zeige Einträge“)" aria-label="Nachricht" enterkeyhint="send" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
-      <!-- Enter = send, Shift+Enter = newline; no send button -->
+      <textarea id="ta" rows="1" placeholder="Schreibe eine Ausgabe (z.B. „Bäckerei 4.60“) oder einen Befehl (z.B. „Zeige Einträge“)" aria-label="Nachricht" enterkeyhint="send" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+      <div id="ce" class="ce" role="textbox" aria-label="Nachricht" contenteditable="true" inputmode="text"></div>
     </div>
     <small style="display:block;text-align:center;color:var(--muted);margin-top:8px">
       Enter: senden • Shift+Enter: Zeile • Prototyp speichert lokal (max. 10 Einträge)
     </small>
   </div>
 
-  <!-- Modal: Sign in -->
   <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="position:fixed;inset:0;display:none;place-items:center;z-index:80;background:rgba(5,8,13,.6);backdrop-filter:blur(6px)">
     <div class="card" style="width:min(92vw,420px);background:#0b1220;border:1px solid #1c2436;border-radius:16px;padding:16px;box-shadow:var(--shadow)">
       <h3 id="authTitle">Anmelden</h3>
@@ -185,7 +155,7 @@
 
     const state = {
       user: JSON.parse(localStorage.getItem('monee_user')||'null'),
-      chats: JSON.parse(localStorage.getItem('monee_chats_v2')||'[]'), // [{id,title,createdAt,msgs:[],entries:[],receipts:[]}]
+      chats: JSON.parse(localStorage.getItem('monee_chats_v2')||'[]'),
       activeId: localStorage.getItem('monee_active') || null
     };
 
@@ -200,10 +170,12 @@
     const escapeHTML = (s)=> s.replace(/[&<>\"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;' }[m]));
     const autolink = (s)=> s.replace(/(https?:\\/\\/[^\\s)]+)|(CHF\\s*\\d+(?:[\\.,]\\d{2})?|\\d+(?:[\\.,]\\d{2})?\\s*CHF)/gi, '<u>$1$2</u>');
 
-    // UI refs
     const chatContainer = $('#chatContainer');
     const chatScroller = document.querySelector('.chat');
-    const inputEl = $('#input');
+    const ta = $('#ta');
+    const ce = $('#ce');
+    const inputIsIOS = /iP(ad|hone|od)/.test(navigator.userAgent);
+    const inputEl = inputIsIOS ? ce : ta; // unified ref
     const fileInput = $('#fileInput');
     const addBtn = $('#addBtn');
     const avatarBtn = $('#avatarBtn');
@@ -224,13 +196,38 @@
     const emptyState = $('#emptyState');
 
     let inputDisabled = false;
-    let allowNewline = false; // set only when Shift+Enter
-    let pendingSend = false;
+    let allowNewline = false;
 
-    /* ---------- Helpers ---------- */
+    // Switch visible input
+    if(inputIsIOS){
+      ta.style.display = 'none';
+      ce.style.display = 'block';
+      ce.setAttribute('placeholder','Schreibe eine Ausgabe …');
+    } else {
+      ce.style.display = 'none';
+      ta.style.display = 'block';
+    }
+
     const ensureScroll = ()=>{ chatScroller.scrollTop = chatScroller.scrollHeight; };
-    const setInputDisabled = (on)=>{ inputDisabled = !!on; inputEl.disabled = on; };
-    const focusComposer = ()=>{ if(!inputDisabled){ inputEl.focus(); setTimeout(()=>inputEl.focus(),0); } };
+    const setInputDisabled = (on)=>{
+      inputDisabled = !!on;
+      if(inputIsIOS){
+        ce.classList.toggle('disabled', on);
+        ce.setAttribute('contenteditable', on ? 'false' : 'true');
+      } else {
+        ta.disabled = on;
+      }
+    };
+    const getInputValue = ()=> inputIsIOS ? ce.innerText : ta.value;
+    const setInputValue = (v)=>{
+      if(inputIsIOS){ ce.innerText = v; }
+      else { ta.value = v; ta.dispatchEvent(new Event('input')); }
+    };
+    const focusComposer = ()=>{
+      if(inputDisabled) return;
+      (inputIsIOS ? ce : ta).focus();
+      setTimeout(()=> (inputIsIOS ? ce : ta).focus(),0);
+    };
 
     const updateAvatar = ()=>{
       if(state.user && state.user.photo){
@@ -244,7 +241,6 @@
       }
     };
 
-    /* ---------- Drawer ---------- */
     const renderDrawer = ()=>{
       chatList.innerHTML = '';
       if(state.chats.length===0){
@@ -282,7 +278,6 @@
     openDrawer.addEventListener('click', ()=>{drawer.classList.add('open'); renderDrawer()});
     closeDrawer.addEventListener('click', ()=>drawer.classList.remove('open'));
 
-    /* ---------- Chats ---------- */
     const newChat = ()=>{
       const id = uid();
       state.chats.push({id, title:'', createdAt:Date.now(), msgs:[], entries:[], receipts:[]});
@@ -295,7 +290,6 @@
     newChatBtn.addEventListener('click', newChat);
     newChatBtn2.addEventListener('click', newChat);
 
-    /* ---------- Render ---------- */
     const render = ()=>{
       const chat = activeChat();
       chatContainer.innerHTML='';
@@ -334,7 +328,6 @@
       chat.msgs.push({role:'ai', text, ts:Date.now()}); save(); render();
     };
 
-    /* ---------- Typing ---------- */
     function showTyping(){
       const row = document.createElement('div');
       row.className = 'msg ai typing';
@@ -361,11 +354,9 @@
       }, delay);
     }
 
-    /* ---------- Commands & Entries ---------- */
     function handleCommandOrEntry(text){
       const t = text.trim();
       const low = t.toLowerCase();
-      // Commands
       const mShow = low.match(/^zeige (?:eintr[aä]ge|entries)(?:\\s+(\\d+))?/);
       const mShowOne = low.match(/^zeige eintrag\\s+(\\d+)/);
       const mDelete = low.match(/^l[öo]sche eintrag\\s+(\\d+)/);
@@ -389,7 +380,6 @@
         return pushAIWithTyping(sumEntries());
       }
 
-      // Else: parse as entry
       const amountMatch = t.match(/(\\d+[.,]\\d{1,2}|\\d+)/);
       const amount = amountMatch ? parseFloat(amountMatch[1].replace(',','.')) : NaN;
       if(!isNaN(amount)){
@@ -459,55 +449,47 @@
       return `Summe der gespeicherten Einträge: **CHF ${sum.toFixed(2)}** (${arr.length}/10 Einträge).`;
     }
 
-    /* ---------- Composer (newline & iOS guard) ---------- */
-    // Guard A: keydown — detect Enter (incl. legacy keyCode) and send unless Shift
-    inputEl.addEventListener('keydown', (e)=>{
-      const isEnter = e.key === 'Enter' || e.keyCode === 13;
-      if(isEnter){
-        if(e.shiftKey){ allowNewline = true; return; }
-        allowNewline = false;
-        e.preventDefault();
-        pendingSend = true;
+    // -------- Input Handlers --------
+    function grow(){
+      if(!inputIsIOS){
+        ta.style.height='auto';
+        ta.style.height = Math.min(ta.scrollHeight, window.innerHeight*0.28) + 'px';
       }
-    });
-    // Guard B: beforeinput — iOS inserts 'insertLineBreak' or 'insertParagraph'
-    inputEl.addEventListener('beforeinput', (e)=>{
-      const t = e.inputType;
-      if((t === 'insertParagraph' || t === 'insertLineBreak') && !allowNewline){
-        e.preventDefault();
-        send();
-      }
-    });
-    // Guard C: input — ultimate fallback if newline sneaks in
-    inputEl.addEventListener('input', ()=>{
-      // auto-grow
-      inputEl.style.height = 'auto';
-      inputEl.style.height = Math.min(inputEl.scrollHeight, window.innerHeight*0.28) + 'px';
-      if(!allowNewline && inputEl.value.includes('\n')){
-        inputEl.value = inputEl.value.replace(/\n+/g,' ').trim();
-        send();
-      }
-      if(pendingSend){
-        pendingSend = false;
-        send();
-      }
-    });
-    // Guard D: keyup — reset allowance
-    inputEl.addEventListener('keyup', (e)=>{
-      if(e.key==='Enter' || e.keyCode === 13){ allowNewline = false; }
-    });
+    }
 
-    const send = ()=>{
-      const val = inputEl.value.trim();
+    function send(){
+      const val = getInputValue().trim();
       if(!val || inputDisabled) return;
       setInputDisabled(true);
-      const toSend = inputEl.value; // preserve exact content
-      inputEl.value='';
-      inputEl.dispatchEvent(new Event('input'));
+      const toSend = getInputValue();
+      setInputValue('');
+      if(!inputIsIOS) grow();
       setTimeout(()=> pushUser(toSend), 10);
-    };
+    }
 
-    /* ---------- Files ---------- */
+    if(inputIsIOS){
+      // iOS contenteditable: Enter sends, Shift+Enter newline
+      ce.addEventListener('beforeinput', (e)=>{
+        if((e.inputType==='insertParagraph' || e.inputType==='insertLineBreak') && !e.shiftKey){
+          e.preventDefault(); send();
+        }
+      });
+      ce.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+      });
+      ce.addEventListener('input', ()=>{ ensureScroll(); });
+    }else{
+      // Desktop/Android textarea
+      ta.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+      });
+      ta.addEventListener('input', grow);
+      grow();
+    }
+
+    // Files
+    const fileInput = document.getElementById('fileInput');
+    const addBtn = document.getElementById('addBtn');
     addBtn.addEventListener('click', ()=>fileInput.click());
     fileInput.addEventListener('change', async (e)=>{
       const files = Array.from(e.target.files||[]);
@@ -523,7 +505,15 @@
     });
     const fileToDataURL = (file)=> new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(file); });
 
-    /* ---------- Auth ---------- */
+    // Auth
+    const avatarBtn = document.getElementById('avatarBtn');
+    const authModal = document.getElementById('authModal');
+    const cancelAuth = document.getElementById('cancelAuth');
+    const confirmAuth = document.getElementById('confirmAuth');
+    const nameInput = document.getElementById('nameInput');
+    const avatarImg = document.getElementById('avatarImg');
+    const avatarFallback = document.getElementById('avatarFallback');
+
     avatarBtn.addEventListener('click', ()=>{ authModal.style.display='grid'; nameInput.value = state.user?.name || ''; nameInput.focus(); });
     cancelAuth.addEventListener('click', ()=>authModal.style.display='none');
     confirmAuth.addEventListener('click', ()=>{
@@ -533,14 +523,14 @@
       state.user = {name, photo: canvas.toDataURL('image/png')}; save(); updateAvatar(); authModal.style.display='none';
     });
 
-    /* ---------- Init ---------- */
+    // Init
     (function init(){
       updateAvatar();
       if(!state.activeId && state.chats.length){ state.activeId = state.chats[0].id; }
       render();
     })();
 
-    /* ---------- Export helpers ---------- */
+    // Export helpers
     window.monee = {
       reset(){
         localStorage.removeItem('monee_user');
