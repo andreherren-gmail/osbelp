@@ -20,7 +20,7 @@
       --warn:#fbbf24;
       --danger:#f87171;
       --ok:#34d399;
-      --chip:#0e1a2b;
+      --chip:#0e1a2b; --ok:#065f46; --warnBg:#92400e; --dangerBg:#7f1d1d;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -98,6 +98,7 @@
     </div>
     <div class="actions">
       <button class="btn" id="newChatBtn">＋ Neues Budget</button>
+      <button class="btn" id="budgetAlertBtn" style="display:none" title="Budgetstatus">⚠️</button>
       <button class="avatar" id="avatarBtn" title="Anmelden">
         <img id="avatarImg" alt="" />
         <span id="avatarFallback" aria-hidden="true">👤</span>
@@ -121,6 +122,15 @@
       </div>
     </section>
   </main>
+
+  <div id="statusSheet" style="position:fixed;left:0;right:0;bottom:-100%;z-index:90;background:#0b1220;border-top:1px solid #162238;border-radius:16px 16px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.35);transition:bottom .25s ease;">
+    <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #142033">
+      <strong>Budgetstatus</strong>
+      <button class="btn ghost" id="closeStatusSheet">✕</button>
+    </div>
+    <div id="statusSheetBody" style="max-height:40vh;overflow:auto;padding:10px 14px;color:#e5e7eb"></div>
+  </div>
+
 
   <div class="composer">
     <div class="composer-inner">
@@ -205,6 +215,10 @@
     const entryCounter = $('#entryCounter');
     const emptyState = $('#emptyState');
     const sendBtn = $('#sendBtn');
+    const budgetAlertBtn = $('#budgetAlertBtn');
+    const statusSheet = $('#statusSheet');
+    const statusSheetBody = $('#statusSheetBody');
+    const closeStatusSheet = $('#closeStatusSheet');
 
     let inputDisabled = false;
 
@@ -301,12 +315,87 @@
       entryCounter.textContent = `${count}/10`;
       renderDrawer();
       ensureScroll();
+      updateBudgetPill();
     };
 
     function decorateMessageHTML(text){
       const isHTML = text.startsWith('<div class="chart-wrap"') || text.startsWith('<svg');
       if(isHTML) return text;
       return autolink(escapeHTML(text)).replace(/\\n/g,'<br>');
+    }
+
+    
+    function calcActiveBudgetStatus(){
+      const chat = activeChat(); if(!chat) return {maxPct:0, alerts:[], hasBudgets:false};
+      const budgets = chat.budgets || {};
+      const categories = Object.keys(budgets);
+      if(categories.length===0) return {maxPct:0, alerts:[], hasBudgets:false};
+      const alerts = [];
+      let maxPct = 0;
+      // compute spent per category
+      const spentMap = {};
+      (chat.entries||[]).forEach(e=>{
+        spentMap[e.category] = (spentMap[e.category]||0) + Number(e.amount||0);
+      });
+      categories.forEach(cat=>{
+        const total = Number(budgets[cat]||0);
+        if(total>0){
+          const spent = Number(spentMap[cat]||0);
+          const pct = spent/total;
+          if(pct>=0.8){ alerts.push({cat, pct}); }
+          if(pct>maxPct) maxPct = pct;
+        }
+      });
+      alerts.sort((a,b)=>b.pct-a.pct);
+      return {maxPct, alerts, hasBudgets:true};
+    }
+
+    function openStatusSheet(lines){
+      statusSheetBody.innerHTML = lines.join('<br>');
+      statusSheet.style.bottom = '0';
+    }
+    function closeStatus(){
+      statusSheet.style.bottom = '-100%';
+    }
+
+    function updateBudgetPill(){
+      const chat = activeChat();
+      budgetPill.style.transition = 'background .2s ease, border-color .2s ease, color .2s ease';
+      if(!chat){ budgetPill.style.background=''; budgetPill.style.borderColor=''; budgetPill.textContent='Kein Budget'; budgetAlertBtn.style.display='none'; return; }
+
+      const status = calcActiveBudgetStatus();
+      const title = chat.title || 'Unbenanntes Budget';
+      let bg = ''; let border = '#223045'; let text = title; let showAlert = false;
+
+      if(!status.hasBudgets){
+        bg = '#0e1a2b'; text = title; showAlert = false;
+      } else if(status.maxPct >= 1.0){
+        bg = getComputedStyle(document.documentElement).getPropertyValue('--dangerBg').trim() || '#7f1d1d';
+        text = `${title}`; showAlert = true;
+      } else if(status.maxPct >= 0.8){
+        bg = getComputedStyle(document.documentElement).getPropertyValue('--warnBg').trim() || '#92400e';
+        text = `${title}`; showAlert = true;
+      } else {
+        bg = getComputedStyle(document.documentElement).getPropertyValue('--ok').trim() || '#065f46';
+        text = `${title}`; showAlert = false;
+      }
+      budgetPill.style.background = bg;
+      budgetPill.style.borderColor = border;
+      budgetPill.style.color = '#e5e7eb';
+      budgetPill.textContent = text;
+
+      // Build alert lines for sheet (mobile instead of tooltip)
+      if(showAlert && status.alerts.length){
+        const lines = status.alerts.map(a=>{
+          const pct = Math.round(a.pct*100);
+          const icon = (pct>=100)?'🔴':(pct>=80)?'🟠':'🟢';
+          return `${icon} ${a.cat}: ${pct}%`;
+        });
+        budgetAlertBtn.style.display='inline-flex';
+        budgetAlertBtn.onclick = ()=> openStatusSheet(lines);
+      } else {
+        budgetAlertBtn.style.display='none';
+      }
     }
 
     const pushUser = (text, attachments=[])=>{
@@ -533,7 +622,7 @@
           const pctLabel = crossed*100 >= 100 ? '100%+' : `${crossed*100}%`;
           const remaining = Math.max(0, total - newSpent);
           const badge = crossed >= 1 ? 'b-danger' : crossed >= 0.8 ? 'b-warn' : 'b-ok';
-          pushAI(`Status **${category}**: <span class="badge ${badge}">Grenze ${pctLabel} erreicht</span> • Verbraucht: **CHF ${newSpent.toFixed(2)}** von **CHF ${total.toFixed(2)}** • Rest: **CHF ${remaining.toFixed(2)}**`);
+          pushAI(`Status **${category}**: ⚠️ Grenze ${pctLabel} erreicht • Verbraucht: **CHF ${newSpent.toFixed(2)}** von **CHF ${total.toFixed(2)}** • Rest: **CHF ${remaining.toFixed(2)}**`);
         } else {
           const remaining = Math.max(0, total - newSpent);
           const pct = Math.round(newPct*100);
@@ -652,6 +741,8 @@
     }
 
     function buildBarChartSVG(items){
+      const chat = activeChat();
+      const budgets = (chat && chat.budgets) ? chat.budgets : {};
       const max = Math.max(...items.map(i=>i[1]));
       const width = 640, padding = 14, barH = 28, gap = 10;
       const h = padding*2 + items.length*barH + (items.length-1)*gap + 30;
@@ -663,12 +754,20 @@
       items.forEach(([k,v])=>{
         const w = Math.max(4, Math.round((v/max)*(width - padding*2 - 80)));
         const x = padding + 80;
-        const color = colorForCategory(k);
+        let color = colorForCategory(k);
+        const total = budgets[k];
+        if (total && total > 0) {
+          const pct = v/total;
+          if (pct >= 0.8) { color = '#f87171'; } // RED when >=80%
+        }
         parts.push(`<text x="${padding}" y="${y+18}" fill="#c8e3ff" font-size="12">${escapeHTML(k)}</text>`);
         parts.push(`<rect x="${x}" y="${y}" rx="6" ry="6" width="${w}" height="${barH}" fill="${color}" opacity="0.9"/>`);
         parts.push(`<text x="${x+w+6}" y="${y+18}" fill="#9fb3d1" font-size="12">CHF ${v.toFixed(2)}</text>`);
         y += barH + gap;
       });
+      parts.push(`</svg></div>`);
+      return parts.join('');
+    }
       parts.push(`</svg></div>`);
       return parts.join('');
     }
@@ -712,6 +811,7 @@
       state.user = {name, photo: canvas.toDataURL('image/png')}; save(); updateAvatar(); authModal.style.display='none';
     });
 
+    closeStatusSheet.addEventListener('click', closeStatus);
     (function init(){
       updateAvatar();
       if(!state.activeId){
