@@ -72,6 +72,9 @@
     @keyframes blink{0%,100%{opacity:.2; transform:translateY(0) scale(1)}50%{opacity:1; transform:translateY(-2px) scale(1.06)}}
     .chart-wrap{margin-top:10px;border:1px solid #1b2740;border-radius:12px;overflow:hidden;background:#0b1220}
     .bubble svg{max-width:100%;height:auto;display:block}
+    /* Bottom sheet open state */
+    #statusSheet.open{ transform:translateY(0); pointer-events:auto; }
+
     .badge{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid #1f2d44;background:#0e1a2b;font-size:12px;color:#c8e3ff}
     .b-ok{border-color:#1f3d2a} .b-warn{border-color:#664c10} .b-danger{border-color:#5a1a1a}
   </style>
@@ -123,7 +126,7 @@
     </section>
   </main>
 
-  <div id="statusSheet" style="position:fixed;left:0;right:0;bottom:-100%;z-index:90;background:#0b1220;border-top:1px solid #162238;border-radius:16px 16px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.35);transition:bottom .25s ease;">
+  <div id="statusSheet" style="position:fixed;left:0;right:0;bottom:0;z-index:90;background:#0b1220;border-top:1px solid #162238;border-radius:16px 16px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.35);transform:translateY(100%);transition:transform .25s ease;pointer-events:none;">
     <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #142033">
       <strong>Budgetstatus</strong>
       <button class="btn ghost" id="closeStatusSheet">✕</button>
@@ -350,13 +353,8 @@
       return {maxPct, alerts, hasBudgets:true};
     }
 
-    function openStatusSheet(lines){
-      statusSheetBody.innerHTML = lines.join('<br>');
-      statusSheet.style.bottom = '0';
-    }
-    function closeStatus(){
-      statusSheet.style.bottom = '-100%';
-    }
+    function openStatusSheet(lines){ statusSheetBody.innerHTML = lines.join('<br>'); statusSheet.classList.add('open'); }
+    function closeStatus(){ statusSheet.classList.remove('open'); }
 
     function updateBudgetPill(){
       const chat = activeChat();
@@ -783,7 +781,7 @@
       setInputDisabled(true);
       const toSend = inputEl.value;
       inputEl.value='';
-      setTimeout(()=> pushUser(toSend), 10);
+      setTimeout(()=> { pushUser(toSend); focusComposer(); }, 10);
     };
     sendBtn.addEventListener('click', ()=>{ if(!sendBtn.classList.contains('disabled')) send(); });
 
