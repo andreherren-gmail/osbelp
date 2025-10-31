@@ -23,11 +23,12 @@
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#0a0f1a 40%, var(--bg) 100%);color:var(--text)}
     .appbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px env(safe-area-inset-top) 10px;background:rgba(9,13,20,.7);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid #121826}
     .brand{display:flex;align-items:center;gap:10px}
-    .brand .logo{width:26px;height:26px;border-radius:8px;background:radial-gradient(120% 120% at 0% 0%, var(--brand), #60a5fa 60%, #7c3aed)}
-    .pill{font-size:12px;color:#e5e7eb;padding:2px 8px;border:1px solid #223045;border-radius:999px;background:#0e1a2b}
+    .brand .logo{width:26px;height:26px;border-radius:8px;background:radial-gradient(120% 120% at 0% 0%, var(--brand), #60a5fa 60%, #7c3aed);cursor:pointer;border:1px solid #1d2740}
+    .title{font-weight:600}
+    .pill{font-size:12px;color:#e5e7eb;padding:2px 8px;border:1px solid #223045;border-radius:999px;background:#0e1a2b;cursor:pointer;user-select:none}
     .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0d1524;color:#fff;padding:8px 10px;border-radius:12px;cursor:pointer}
     .btn.ghost{background:transparent}
-    .avatar{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;background:#0c1426;overflow:hidden}
+    .avatar{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;background:#0c1426;overflow:hidden;cursor:pointer}
     .wrap{min-height:100%;display:flex;flex-direction:column}
     .chat{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:12px 12px 120px}
     .container{max-width:760px;margin:0 auto}
@@ -35,7 +36,7 @@
     .bubble{padding:12px 14px;border-radius:16px;border:1px solid var(--border);line-height:1.55}
     .msg.user .bubble{background:var(--bubble-user)} .msg.ai .bubble{background:var(--bubble-ai)}
     .meta{font-size:12px;color:var(--muted);margin-top:6px}
-    .empty{margin:12vh auto 0;max-width:640px;text-align:center;color:var(--muted)}
+    .empty{margin:12vh auto 0;max-width:640px;text-align:center;color:#9ca3af}
     .empty h2{color:#e5e7eb;font-size:20px;margin:0 0 8px}
     .tips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
     .tip{padding:10px;border:1px dashed #263245;border-radius:12px;color:#cbd5e1;background:linear-gradient(180deg,#0d1526,#0a101c)}
@@ -46,7 +47,6 @@
     .hidden-input{display:none}
     textarea{flex:1;resize:none;height:44px;min-height:44px;max-height:44px;overflow:auto;background:transparent;border:none;color:#e5e7eb;font-size:16px;line-height:1.5;outline:none;padding:10px 8px}
     .send-btn{position:relative;z-index:102;width:44px;height:44px;border-radius:999px;border:1px solid #164e63;background:linear-gradient(180deg,#0e1a2b,#0a1322);display:grid;place-items:center;cursor:pointer;flex:0 0 auto;color:#a5f3fc}
-    /* Bottom sheet */
     #statusSheet{position:fixed;left:0;right:0;bottom:0;z-index:90;background:#0b1220;border-top:1px solid #162238;border-radius:16px 16px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.35);transform:translateY(100%);transition:transform .25s ease;pointer-events:none;will-change:transform}
     #statusSheet.open{transform:translateY(0); pointer-events:auto;}
   </style>
@@ -54,9 +54,9 @@
 <body>
   <header class="appbar">
     <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
+      <div id="logoBtn" class="logo" title="Home"></div>
       <div class="title">Monee</div>
-      <span class="pill" id="activeBudgetPill">Kein Budget</span>
+      <span class="pill" id="activeBudgetPill" title="Budget umbenennen">Unbenanntes Budget</span>
       <span class="pill" id="entryCounter">0/10</span>
     </div>
     <div class="actions">
@@ -65,6 +65,20 @@
       <button class="avatar" id="avatarBtn" title="Anmelden">👤</button>
     </div>
   </header>
+
+  
+  <div id="drawerOverlay"></div>
+  <aside id="drawer" aria-label="Budgets">
+    <div id="drawerHeader">
+      <strong>Deine Budgets</strong>
+      <button class="btn ghost" id="closeDrawerBtn">✕</button>
+    </div>
+    <div id="drawerList"></div>
+    <div class="d-actions">
+      <button class="btn" id="drawerNewBtn">＋ Neues Budget</button>
+      <button class="btn ghost" id="drawerResetBtn" title="Lokale Daten löschen">Reset</button>
+    </div>
+  </aside>
 
   <main class="wrap">
     <section class="chat">
@@ -122,20 +136,20 @@
 
     const state = {
       user: JSON.parse(localStorage.getItem('monee_user')||'null'),
-      chats: JSON.parse(localStorage.getItem('monee_chats_v6')||'[]'),
+      chats: JSON.parse(localStorage.getItem('monee_chats_v7')||'[]'),
       activeId: localStorage.getItem('monee_active') || null,
       pendingBudget: null
     };
 
     const save = ()=>{
       localStorage.setItem('monee_user', JSON.stringify(state.user));
-      localStorage.setItem('monee_chats_v6', JSON.stringify(state.chats));
+      localStorage.setItem('monee_chats_v7', JSON.stringify(state.chats));
       localStorage.setItem('monee_active', state.activeId||'');
     };
     const uid = ()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
     const activeChat = ()=> state.chats.find(c=>c.id===state.activeId) || null;
     const fmtDate = (ts)=> new Date(ts).toLocaleString(undefined,{dateStyle:'medium', timeStyle:'short'});
-    const escapeHTML = (s)=> s.replace(/[&<>\"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[m]));
+    const escapeHTML = (s)=> s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' }[m]));
     const autolink = (s)=> s.replace(/(https?:\/\/[^\s)]+)|(CHF\s*\d+(?:[\.,]\d{2})?|\d+(?:[\.,]\d{2})?\s*CHF)/gi, '<u>$1$2</u>');
 
     const COLORS = ['#22d3ee','#60a5fa','#a78bfa','#f472b6','#34d399','#fbbf24','#f87171','#c084fc','#4ade80','#93c5fd'];
@@ -163,6 +177,7 @@
     const budgetAlertBtn = $('#budgetAlertBtn');
     const newChatBtn = $('#newChatBtn');
     const avatarBtn = $('#avatarBtn');
+    const logoBtn = $('#logoBtn');
     const authModal = $('#authModal');
     const nameInput = $('#nameInput');
     const cancelAuth = $('#cancelAuth');
@@ -170,6 +185,89 @@
     const statusSheet = $('#statusSheet');
     const statusSheetBody = $('#statusSheetBody');
     const closeStatusSheet = $('#closeStatusSheet');
+    // Drawer refs
+    const drawer = $('#drawer');
+    const drawerOverlay = $('#drawerOverlay');
+    const drawerList = $('#drawerList');
+    const closeDrawerBtn = $('#closeDrawerBtn');
+    const drawerNewBtn = $('#drawerNewBtn');
+    const drawerResetBtn = $('#drawerResetBtn');
+
+    function renderDrawer(){
+      drawerList.innerHTML = '';
+      if(state.chats.length===0){
+        const empty = document.createElement('div');
+        empty.className='meta';
+        empty.style.padding='12px 10px';
+        empty.textContent='Noch keine Budgets.';
+        drawerList.appendChild(empty);
+        return;
+      }
+      // Build list
+      state.chats.slice().sort((a,b)=> (b.createdAt||0)-(a.createdAt||0)).forEach((c,idx)=>{
+        const div = document.createElement('div');
+        div.className = 'd-item';
+        const entries = c.entries||[];
+        const sum = entries.reduce((s,e)=>s+Number(e.amount||0),0);
+        const budgets = c.budgets||{};
+        // compute max pct
+        let maxPct = 0;
+        const spentMap = {};
+        entries.forEach(e=>{ spentMap[e.category]=(spentMap[e.category]||0)+Number(e.amount||0); });
+        Object.keys(budgets).forEach(cat=>{
+          const total = Number(budgets[cat]||0);
+          if(total>0){
+            const spent = Number(spentMap[cat]||0);
+            const pct = spent/total;
+            if(pct>maxPct) maxPct=pct;
+          }
+        });
+        let badgeClass = 'badge bd-ok'; let badgeText = 'OK';
+        if(maxPct>=1.0){ badgeClass='badge bd-danger'; badgeText='100%+'; }
+        else if(maxPct>=0.8){ badgeClass='badge bd-warn'; badgeText='80%'; }
+        const title = c.title && c.title.trim() ? c.title.trim() : 'Unbenanntes Budget';
+        div.innerHTML = `
+          <div class="avatar" style="width:28px;height:28px">${state.activeId===c.id?'⭐':'💼'}</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <strong>${title}</strong>
+              <span class="${badgeClass}">${badgeText}</span>
+            </div>
+            <p class="meta">Einträge: ${entries.length}/10 • Summe: CHF ${sum.toFixed(2)}</p>
+          </div>
+          <button class="btn ghost" data-action="rename" title="Umbenennen">✎</button>
+          <button class="btn ghost" data-action="delete" title="Löschen">🗑️</button>
+        `;
+        div.addEventListener('click', (e)=>{
+          const action = e.target && e.target.getAttribute && e.target.getAttribute('data-action');
+          if(action==='rename'){
+            e.stopPropagation();
+            const newTitle = prompt('Budget umbenennen:', c.title||'');
+            if(newTitle!=null){ c.title = newTitle.trim(); save(); render(); renderDrawer(); }
+            return;
+          }
+          if(action==='delete'){
+            e.stopPropagation();
+            if(confirm('Dieses Budget wirklich löschen?')){
+              const idx = state.chats.findIndex(x=>x.id===c.id);
+              if(idx>=0){
+                state.chats.splice(idx,1);
+                if(state.activeId===c.id){ state.activeId = state.chats[0]?.id || null; }
+                save(); render(); renderDrawer();
+              }
+            }
+            return;
+          }
+          // switch active
+          state.activeId = c.id; save(); render(); closeDrawer();
+          pushAIWithTyping('Budget gewechselt: **' + (c.title||'Unbenanntes Budget') + '**');
+        }, {passive:false});
+        drawerList.appendChild(div);
+      });
+    }
+    function openDrawer(){ renderDrawer(); drawer.classList.add('open'); drawerOverlay.style.display='block'; }
+    function closeDrawer(){ drawer.classList.remove('open'); drawerOverlay.style.display='none'; }
+
 
     const ensureScroll = ()=>{ chatScroller.scrollTop = chatScroller.scrollHeight; };
     const focusComposer = ()=>{ inputEl.focus(); setTimeout(()=>inputEl.focus(),0); };
@@ -203,7 +301,8 @@
     function decorateMessageHTML(text){
       const isHTML = text.startsWith('<div class="chart-wrap"') || text.startsWith('<svg');
       if(isHTML) return text;
-      return autolink(escapeHTML(text)).replace(/\n/g,'<br>');
+      return autolink(escapeHTML(text)).replace(/
+/g,'<br>');
     }
 
     const pushUser = (text)=>{
@@ -217,7 +316,7 @@
       chat.msgs.push({role:'ai', text, ts:Date.now()}); save(); render();
     };
 
-    function pushAIWithTyping(text, delay=300){
+    function pushAIWithTyping(text, delay=250){
       const typingEl = document.createElement('div');
       typingEl.className = 'msg ai typing';
       typingEl.innerHTML = '<div class="avatar" style="width:28px;height:28px">🤖</div><div style="flex:1"><div class="bubble"><span class="dollar">$</span><span class="dollar">$</span><span class="dollar">$</span></div><div class="meta">schreibt…</div></div>';
@@ -323,7 +422,8 @@
         '• **Ausgaben Oktober [2025]** – Monatsreport + Mini-Chart',
         '',
         'Ausgabe hinzufügen: *„Migros 18.40 #Lebensmittel“* oder *„SBB 8.40 [Mobilität]“*'
-      ].join('\n');
+      ].join('
+');
     }
 
     function ensureBudgets(chat){ if(!chat.budgets) chat.budgets = {}; }
@@ -353,7 +453,10 @@
         const status = total ? thresholdBadge(spent, total) : '';
         return `${k}: ${total?`CHF ${total.toFixed(2)}`:'–'} • Verbraucht: CHF ${spent.toFixed(2)} ${total?`(${pct}%)`:''} ${status}`.trim();
       });
-      return (cat?`Budget **${cat}**:\n`:'Budgets:\n') + lines.join('\n');
+      return (cat?`Budget **${cat}**:
+`:'Budgets:
+') + lines.join('
+');
     }
 
     function deleteBudget(cat){
@@ -393,7 +496,9 @@
       save();
 
       const left = 10 - chat.entries.length;
-      pushAIWithTyping(`Notiert: **${escapeHTML(label)} – CHF ${amount.toFixed(2)}**\nKategorie: ${category}\nEs sind jetzt **${chat.entries.length}/10** Einträge gespeichert.${left?` (noch ${left} frei)`:''}`);
+      pushAIWithTyping(`Notiert: **${escapeHTML(label)} – CHF ${amount.toFixed(2)}**
+Kategorie: ${category}
+Es sind jetzt **${chat.entries.length}/10** Einträge gespeichert.${left?` (noch ${left} frei)`:''}`);
 
       const isFirstInCat = prevSpent === 0;
       if(isFirstInCat && !(category in chat.budgets)){
@@ -438,9 +543,11 @@
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
       const arr = (chat.entries||[]).slice(-n);
       if(arr.length===0) return 'Keine Einträge vorhanden. Füge z.B. *„Migros 18.40 #Lebensmittel“* hinzu.';
-      let out = 'Letzte Einträge:\n';
+      let out = 'Letzte Einträge:
+';
       arr.forEach((e,i)=>{
-        out += `${i+1}. ${e.label} – CHF ${e.amount.toFixed(2)} [${e.category}] (${fmtDate(e.ts)})\n`;
+        out += `${i+1}. ${e.label} – CHF ${e.amount.toFixed(2)} [${e.category}] (${fmtDate(e.ts)})
+`;
       });
       return out.trim();
     }
@@ -450,7 +557,9 @@
       const arr = chat.entries||[];
       if(idx<1 || idx>arr.length) return `Eintrag ${idx} existiert nicht (1..${arr.length}).`;
       const e = arr[idx-1];
-      return `Eintrag ${idx}: **${e.label}** – **CHF ${e.amount.toFixed(2)}**\nKategorie: ${e.category}\nDatum: ${fmtDate(e.ts)}`;
+      return `Eintrag ${idx}: **${e.label}** – **CHF ${e.amount.toFixed(2)}**
+Kategorie: ${e.category}
+Datum: ${fmtDate(e.ts)}`;
     }
 
     function deleteEntry(idx){
@@ -484,12 +593,14 @@
       const map = {};
       arr.forEach(e=> map[e.category] = (map[e.category]||0) + Number(e.amount||0));
       const lines = Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}: CHF ${v.toFixed(2)}`);
-      return 'Summe nach Kategorie:\n' + lines.join('\n');
+      return 'Summe nach Kategorie:
+' + lines.join('
+');
     }
 
     function monthIndexFromGerman(s){
       const m = {'jan':0,'januar':0,'feb':1,'februar':1,'mär':2,'maerz':2,'märz':2,'apr':3,'april':3,'mai':4,'jun':5,'juni':5,'jul':6,'juli':6,'aug':7,'august':7,'sep':8,'sept':8,'september':8,'okt':9,'oktober':9,'nov':10,'november':10,'dez':11,'dezember':11};
-      const k = s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace('.', '');
+      const k = s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace('.', '');
       return (k in m) ? m[k] : -1;
     }
 
@@ -510,8 +621,10 @@
       const items = Object.entries(map).sort((a,b)=>b[1]-a[1]);
       const lines = items.map(([k,v])=>`${k}: CHF ${v.toFixed(2)}`);
       const title = `Ausgaben ${monthNameDE(monthIdx)} ${year}: **CHF ${sum.toFixed(2)}**`;
-      pushAIWithTyping(title + '\n' + lines.join('\n'), 300);
-      setTimeout(()=>{ pushAI(buildBarChartSVG(items)); }, 350);
+      pushAIWithTyping(title + '
+' + lines.join('
+'), 250);
+      setTimeout(()=>{ pushAI(buildBarChartSVG(items)); }, 300);
     }
 
     function buildBarChartSVG(items){
@@ -580,25 +693,28 @@
 
     function updateBudgetPill(){
       const chat = activeChat();
-      if(!chat){ budgetPill.textContent='Kein Budget'; budgetAlertBtn.style.display='none'; return; }
+      if(!chat){ budgetPill.textContent='Kein Budget'; budgetAlertBtn.style.display='inline-flex'; budgetAlertBtn.onclick = ()=> pushAIWithTyping('Kein Budget aktiv. Tippe **＋ Neues Budget**.'); return; }
 
       const status = calcActiveBudgetStatus();
       const title = chat.title || 'Unbenanntes Budget';
-      let bg = '#0e1a2b'; let showAlert = false;
+      let bg = '#0e1a2b';
 
-      if(!status.hasBudgets){ bg = '#0e1a2b'; showAlert = false; }
-      else if(status.maxPct >= 1.0){ bg = getComputedStyle(document.documentElement).getPropertyValue('--dangerPill').trim() || '#7f1d1d'; showAlert = true; }
-      else if(status.maxPct >= 0.8){ bg = getComputedStyle(document.documentElement).getPropertyValue('--warnPill').trim() || '#92400e'; showAlert = true; }
-      else { bg = getComputedStyle(document.documentElement).getPropertyValue('--okPill').trim() || '#065f46'; showAlert = false; }
+      if(!status.hasBudgets){ bg = '#0e1a2b'; }
+      else if(status.maxPct >= 1.0){ bg = getComputedStyle(document.documentElement).getPropertyValue('--dangerPill').trim() || '#7f1d1d'; }
+      else if(status.maxPct >= 0.8){ bg = getComputedStyle(document.documentElement).getPropertyValue('--warnPill').trim() || '#92400e'; }
+      else { bg = getComputedStyle(document.documentElement).getPropertyValue('--okPill').trim() || '#065f46'; }
 
       budgetPill.style.background = bg;
       budgetPill.textContent = title;
 
-      if(showAlert && status.alerts.length){
+      if(status.alerts && status.alerts.length){
         const lines = status.alerts.map(a=>`${Math.round(a.pct*100)}% • ${a.cat}`);
         budgetAlertBtn.style.display='inline-flex';
         budgetAlertBtn.onclick = ()=> openStatusSheet(lines);
-      } else { budgetAlertBtn.style.display='none'; }
+      } else {
+        budgetAlertBtn.style.display='inline-flex';
+        budgetAlertBtn.onclick = ()=> pushAIWithTyping('Alles im grünen Bereich – keine Budgetwarnungen.');
+      }
     }
 
     function newChat(){
@@ -630,13 +746,6 @@
       el.addEventListener('touchstart', (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); }, {passive:false});
     }
     addTap(sendBtn, ()=> send());
-    addTap(budgetAlertBtn, ()=>{
-      const status = calcActiveBudgetStatus();
-      if(status.alerts && status.alerts.length){
-        const lines = status.alerts.map(a=>`${Math.round(a.pct*100)}% • ${a.cat}`);
-        openStatusSheet(lines);
-      }
-    });
     addTap(closeStatusSheet, ()=> closeStatus());
     addTap(newChatBtn, ()=> newChat());
     addTap(avatarBtn, ()=>{
@@ -648,6 +757,22 @@
       const name = (nameInput && nameInput.value.trim()) || "Demo User";
       state.user = { name }; save();
       authModal.style.display = "none";
+    });
+    addTap(logoBtn, ()=>{
+      chatScroller.scrollTo({top:0, behavior:'smooth'});
+      pushAIWithTyping('Tipp: Sende **Hilfe** für verfügbare Befehle oder tippe z. B. **Zeige Einträge**.');
+    });
+    
+    addTap(logoBtn, ()=>{ openDrawer(); });
+    addTap(closeDrawerBtn, ()=> closeDrawer());
+    addTap(drawerOverlay, ()=> closeDrawer());
+    addTap(drawerNewBtn, ()=>{ closeDrawer(); newChat(); });
+    addTap(drawerResetBtn, ()=>{ if(confirm('Alle lokalen Daten löschen?')) { monee.reset(); } });
+
+    addTap(budgetPill, ()=>{
+      const chat = activeChat(); if(!chat) return;
+      const title = prompt('Budget umbenennen:', chat.title || '');
+      if(title!=null){ chat.title = title.trim(); save(); render(); }
     });
 
     (function init(){
@@ -664,7 +789,7 @@
       render();
     })();
 
-    window.monee = { reset(){ localStorage.removeItem('monee_user'); localStorage.removeItem('monee_chats_v6'); localStorage.removeItem('monee_active'); location.reload(); } };
+    window.monee = { reset(){ localStorage.removeItem('monee_user'); localStorage.removeItem('monee_chats_v7'); localStorage.removeItem('monee_active'); location.reload(); } };
   </script>
 </body>
 </html>
