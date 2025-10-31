@@ -13,33 +13,27 @@
       --brand:#22d3ee;
       --bubble-user:#1f2937;
       --bubble-ai:#0b1220;
-      --ring:#22d3ee55;
       --border:#1f2937;
-      --money:#22c55e;
-      --accent:#22d3ee;
       --chip:#0e1a2b;
       --okPill:#065f46;
       --warnPill:#92400e;
       --dangerPill:#7f1d1d;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box} html,body{height:100%}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#0a0f1a 40%, var(--bg) 100%);color:var(--text)}
-    .appbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px env(safe-area-inset-top) 10px;background:rgba(9,13,20,.7);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid #121826}
+    .appbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px env(safe-area-inset-top) 10px;background:rgba(9,13,20,.7);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid #121826}
     .brand{display:flex;align-items:center;gap:10px}
     .brand .logo{width:26px;height:26px;border-radius:8px;background:radial-gradient(120% 120% at 0% 0%, var(--brand), #60a5fa 60%, #7c3aed)}
     .pill{font-size:12px;color:#e5e7eb;padding:2px 8px;border:1px solid #223045;border-radius:999px;background:#0e1a2b}
     .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0d1524;color:#fff;padding:8px 10px;border-radius:12px;cursor:pointer}
     .btn.ghost{background:transparent}
     .avatar{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);display:grid;place-items:center;background:#0c1426;overflow:hidden}
-    .avatar img{width:100%;height:100%;object-fit:cover}
     .wrap{min-height:100%;display:flex;flex-direction:column}
     .chat{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;padding:12px 12px 120px}
     .container{max-width:760px;margin:0 auto}
     .msg{display:flex;gap:10px;margin:12px 0}
     .bubble{padding:12px 14px;border-radius:16px;border:1px solid var(--border);line-height:1.55}
-    .msg.user .bubble{background:var(--bubble-user)}
-    .msg.ai .bubble{background:var(--bubble-ai)}
+    .msg.user .bubble{background:var(--bubble-user)} .msg.ai .bubble{background:var(--bubble-ai)}
     .meta{font-size:12px;color:var(--muted);margin-top:6px}
     .empty{margin:12vh auto 0;max-width:640px;text-align:center;color:var(--muted)}
     .empty h2{color:#e5e7eb;font-size:20px;margin:0 0 8px}
@@ -47,21 +41,11 @@
     .tip{padding:10px;border:1px dashed #263245;border-radius:12px;color:#cbd5e1;background:linear-gradient(180deg,#0d1526,#0a101c)}
     @media(min-width:720px){.tips{grid-template-columns:repeat(4,1fr)}}
     .composer{position:fixed;left:0;right:0;bottom:0;z-index:100;padding:12px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg, rgba(10,14,22,0), rgba(10,14,22,.85) 30%, rgba(10,14,22,.95));display:grid;place-items:center}
-    .composer-inner{position:relative;z-index:101;width:100%;max-width:780px;display:flex;align-items:flex-end;gap:8px;background:#0c1426;border:1px solid var(--border);border-radius:24px;padding:8px;box-shadow:0 0 0 2px transparent;transition:.15s box-shadow ease,.15s border-color ease;pointer-events:auto}
+    .composer-inner{position:relative;z-index:101;width:100%;max-width:780px;display:flex;align-items:flex-end;gap:8px;background:#0c1426;border:1px solid var(--border);border-radius:24px;padding:8px;pointer-events:auto}
     .icon-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid #1e293b;background:#0a1222;cursor:pointer}
     .hidden-input{display:none}
     textarea{flex:1;resize:none;height:44px;min-height:44px;max-height:44px;overflow:auto;background:transparent;border:none;color:#e5e7eb;font-size:16px;line-height:1.5;outline:none;padding:10px 8px}
-    .send-btn{position:relative;z-index:102;width:44px;height:44px;border-radius:999px;border:1px solid #164e63;background:linear-gradient(180deg,#0e1a2b,#0a1322);display:grid;place-items:center;cursor:pointer;flex:0 0 auto;box-shadow:inset 0 0 0 1px #113246, 0 6px 18px rgba(0,0,0,.3);transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;color:#a5f3fc}
-    .send-btn:hover{transform:translateY(-1px); box-shadow:inset 0 0 0 1px #1e7498, 0 8px 20px rgba(0,0,0,.35)}
-    .send-btn:active{transform:translateY(0)}
-    .send-icon{font-size:18px;line-height:1;transform:translateX(1px)}
-    .typing .bubble{display:inline-flex;gap:8px;align-items:center}
-    .dollar{display:inline-block;font-weight:700;color:#22c55e;opacity:.2;transform:translateY(0) scale(1);animation:blink .9s infinite}
-    .dollar:nth-child(2){animation-delay:.15s}
-    .dollar:nth-child(3){animation-delay:.3s}
-    @keyframes blink{0%,100%{opacity:.2; transform:translateY(0) scale(1)}50%{opacity:1; transform:translateY(-2px) scale(1.06)}}
-    .chart-wrap{margin-top:10px;border:1px solid #1b2740;border-radius:12px;overflow:hidden;background:#0b1220}
-    .bubble svg{max-width:100%;height:auto;display:block}
+    .send-btn{position:relative;z-index:102;width:44px;height:44px;border-radius:999px;border:1px solid #164e63;background:linear-gradient(180deg,#0e1a2b,#0a1322);display:grid;place-items:center;cursor:pointer;flex:0 0 auto;color:#a5f3fc}
     /* Bottom sheet */
     #statusSheet{position:fixed;left:0;right:0;bottom:0;z-index:90;background:#0b1220;border-top:1px solid #162238;border-radius:16px 16px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.35);transform:translateY(100%);transition:transform .25s ease;pointer-events:none;will-change:transform}
     #statusSheet.open{transform:translateY(0); pointer-events:auto;}
@@ -76,6 +60,7 @@
       <span class="pill" id="entryCounter">0/10</span>
     </div>
     <div class="actions">
+      <button class="btn" id="newChatBtn">＋ Neues Budget</button>
       <button class="btn" id="budgetAlertBtn" style="display:none" title="Budgetstatus">⚠️</button>
       <button class="avatar" id="avatarBtn" title="Anmelden">👤</button>
     </div>
@@ -118,19 +103,33 @@
     <div id="statusSheetBody" style="max-height:40vh;overflow:auto;padding:10px 14px;color:#e5e7eb"></div>
   </div>
 
+  <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="position:fixed;inset:0;display:none;place-items:center;z-index:120;background:rgba(5,8,13,.6);backdrop-filter:blur(6px)">
+    <div class="card" style="width:min(92vw,420px);background:#0b1220;border:1px solid #1c2436;border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.25)">
+      <h3 id="authTitle">Anmelden</h3>
+      <div class="row" style="display:flex;gap:10px;align-items:center">
+        <div class="avatar" style="width:32px;height:32px;display:grid;place-items:center;border:1px solid #1f2937;background:#0c1426;border-radius:50%">🧑‍💻</div>
+        <input id="nameInput" placeholder="Name" style="flex:1;background:#0a1222;border:1px solid #1f2937;border-radius:10px;color:#e5e7eb;padding:8px 10px">
+      </div>
+      <div class="row" style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+        <button class="btn ghost" id="cancelAuth">Abbrechen</button>
+        <button class="btn" id="confirmAuth">Anmelden</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const $ = (q,root=document)=>root.querySelector(q);
 
     const state = {
       user: JSON.parse(localStorage.getItem('monee_user')||'null'),
-      chats: JSON.parse(localStorage.getItem('monee_chats_v5')||'[]'),
+      chats: JSON.parse(localStorage.getItem('monee_chats_v6')||'[]'),
       activeId: localStorage.getItem('monee_active') || null,
       pendingBudget: null
     };
 
     const save = ()=>{
       localStorage.setItem('monee_user', JSON.stringify(state.user));
-      localStorage.setItem('monee_chats_v5', JSON.stringify(state.chats));
+      localStorage.setItem('monee_chats_v6', JSON.stringify(state.chats));
       localStorage.setItem('monee_active', state.activeId||'');
     };
     const uid = ()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
@@ -162,6 +161,12 @@
     const emptyState = $('#emptyState');
     const sendBtn = $('#sendBtn');
     const budgetAlertBtn = $('#budgetAlertBtn');
+    const newChatBtn = $('#newChatBtn');
+    const avatarBtn = $('#avatarBtn');
+    const authModal = $('#authModal');
+    const nameInput = $('#nameInput');
+    const cancelAuth = $('#cancelAuth');
+    const confirmAuth = $('#confirmAuth');
     const statusSheet = $('#statusSheet');
     const statusSheetBody = $('#statusSheetBody');
     const closeStatusSheet = $('#closeStatusSheet');
@@ -169,7 +174,7 @@
     const ensureScroll = ()=>{ chatScroller.scrollTop = chatScroller.scrollHeight; };
     const focusComposer = ()=>{ inputEl.focus(); setTimeout(()=>inputEl.focus(),0); };
 
-    const render = ()=>{
+    function render(){
       const chat = activeChat();
       chatContainer.innerHTML = '';
       if(!chat || (chat.msgs?.length||0)===0){
@@ -193,7 +198,7 @@
       entryCounter.textContent = `${count}/10`;
       ensureScroll();
       updateBudgetPill();
-    };
+    }
 
     function decorateMessageHTML(text){
       const isHTML = text.startsWith('<div class="chart-wrap"') || text.startsWith('<svg');
@@ -212,7 +217,7 @@
       chat.msgs.push({role:'ai', text, ts:Date.now()}); save(); render();
     };
 
-    function pushAIWithTyping(text, delay=350){
+    function pushAIWithTyping(text, delay=300){
       const typingEl = document.createElement('div');
       typingEl.className = 'msg ai typing';
       typingEl.innerHTML = '<div class="avatar" style="width:28px;height:28px">🤖</div><div style="flex:1"><div class="bubble"><span class="dollar">$</span><span class="dollar">$</span><span class="dollar">$</span></div><div class="meta">schreibt…</div></div>';
@@ -238,7 +243,6 @@
       const t = text.trim();
       const low = t.toLowerCase();
 
-      // Pending budget answer
       if(state.pendingBudget){
         const val = parseAmountFromText(low);
         if(!isNaN(val)){
@@ -322,9 +326,7 @@
       ].join('\n');
     }
 
-    function ensureBudgets(chat){
-      if(!chat.budgets) chat.budgets = {};
-    }
+    function ensureBudgets(chat){ if(!chat.budgets) chat.budgets = {}; }
 
     function setBudget(cat, amt, silent=false){
       const chat = activeChat(); if(!chat) return 'Kein aktives Budget.';
@@ -486,22 +488,13 @@
     }
 
     function monthIndexFromGerman(s){
-      const m = {
-        'jan':0,'januar':0,
-        'feb':1,'februar':1,
-        'mär':2,'maerz':2,'märz':2,
-        'apr':3,'april':3,
-        'mai':4,
-        'jun':5,'juni':5,
-        'jul':6,'juli':6,
-        'aug':7,'august':7,
-        'sep':8,'sept':8,'september':8,
-        'okt':9,'oktober':9,
-        'nov':10,'november':10,
-        'dez':11,'dezember':11
-      };
+      const m = {'jan':0,'januar':0,'feb':1,'februar':1,'mär':2,'maerz':2,'märz':2,'apr':3,'april':3,'mai':4,'jun':5,'juni':5,'jul':6,'juli':6,'aug':7,'august':7,'sep':8,'sept':8,'september':8,'okt':9,'oktober':9,'nov':10,'november':10,'dez':11,'dezember':11};
       const k = s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace('.', '');
       return (k in m) ? m[k] : -1;
+    }
+
+    function monthNameDE(i){
+      return ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'][i]||'';
     }
 
     function renderMonthSummary(monthIdx, year){
@@ -518,14 +511,7 @@
       const lines = items.map(([k,v])=>`${k}: CHF ${v.toFixed(2)}`);
       const title = `Ausgaben ${monthNameDE(monthIdx)} ${year}: **CHF ${sum.toFixed(2)}**`;
       pushAIWithTyping(title + '\n' + lines.join('\n'), 300);
-      setTimeout(()=>{
-        const svg = buildBarChartSVG(items);
-        pushAI(svg);
-      }, 350);
-    }
-
-    function monthNameDE(i){
-      return ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'][i]||'';
+      setTimeout(()=>{ pushAI(buildBarChartSVG(items)); }, 350);
     }
 
     function buildBarChartSVG(items){
@@ -590,9 +576,7 @@
       statusSheetBody.innerHTML = lines.join('<br>');
       statusSheet.classList.add('open');
     }
-    function closeStatus(){
-      statusSheet.classList.remove('open');
-    }
+    function closeStatus(){ statusSheet.classList.remove('open'); }
 
     function updateBudgetPill(){
       const chat = activeChat();
@@ -602,56 +586,20 @@
       const title = chat.title || 'Unbenanntes Budget';
       let bg = '#0e1a2b'; let showAlert = false;
 
-      if(!status.hasBudgets){
-        bg = '#0e1a2b'; showAlert = false;
-      } else if(status.maxPct >= 1.0){
-        bg = getComputedStyle(document.documentElement).getPropertyValue('--dangerPill').trim() || '#7f1d1d';
-        showAlert = true;
-      } else if(status.maxPct >= 0.8){
-        bg = getComputedStyle(document.documentElement).getPropertyValue('--warnPill').trim() || '#92400e';
-        showAlert = true;
-      } else {
-        bg = getComputedStyle(document.documentElement).getPropertyValue('--okPill').trim() || '#065f46';
-        showAlert = false;
-      }
+      if(!status.hasBudgets){ bg = '#0e1a2b'; showAlert = false; }
+      else if(status.maxPct >= 1.0){ bg = getComputedStyle(document.documentElement).getPropertyValue('--dangerPill').trim() || '#7f1d1d'; showAlert = true; }
+      else if(status.maxPct >= 0.8){ bg = getComputedStyle(document.documentElement).getPropertyValue('--warnPill').trim() || '#92400e'; showAlert = true; }
+      else { bg = getComputedStyle(document.documentElement).getPropertyValue('--okPill').trim() || '#065f46'; showAlert = false; }
+
       budgetPill.style.background = bg;
       budgetPill.textContent = title;
 
       if(showAlert && status.alerts.length){
-        const lines = status.alerts.map(a=>{
-          const pct = Math.round(a.pct*100);
-          const icon = (pct>=100)?'🔴':(pct>=80)?'🟠':'🟢';
-          return `${icon} ${a.cat}: ${pct}%`;
-        });
+        const lines = status.alerts.map(a=>`${Math.round(a.pct*100)}% • ${a.cat}`);
         budgetAlertBtn.style.display='inline-flex';
         budgetAlertBtn.onclick = ()=> openStatusSheet(lines);
-      } else {
-        budgetAlertBtn.style.display='none';
-      }
+      } else { budgetAlertBtn.style.display='none'; }
     }
-
-    const send = ()=>{
-      const val = inputEl.value.trim();
-      if(!val) return;
-      const toSend = inputEl.value;
-      inputEl.value='';
-      setTimeout(()=> { pushUser(toSend); focusComposer(); }, 10);
-    };
-
-    function addTap(el, fn){
-      if(!el) return;
-      el.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
-      el.addEventListener('touchstart', (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); }, {passive:false});
-    }
-    addTap(sendBtn, ()=> send());
-    addTap(budgetAlertBtn, ()=>{
-      const status = calcActiveBudgetStatus();
-      if(status.alerts && status.alerts.length){
-        const lines = status.alerts.map(a=>`${Math.round(a.pct*100)}% • ${a.cat}`);
-        openStatusSheet(lines);
-      }
-    });
-    addTap(closeStatusSheet, ()=> closeStatus());
 
     function newChat(){
       const id = uid();
@@ -668,50 +616,44 @@
       return `Eintrag ${idx} neu zugeordnet zu **${cat}**.`;
     }
 
-    function monthNameDE(i){
-      return ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'][i]||'';
+    function send(){
+      const val = inputEl.value.trim();
+      if(!val) return;
+      const toSend = inputEl.value;
+      inputEl.value='';
+      setTimeout(()=> { pushUser(toSend); focusComposer(); }, 10);
     }
 
-    function buildBarChartSVG(items){
-      const chat = activeChat();
-      const budgets = (chat && chat.budgets) ? chat.budgets : {};
-      const max = Math.max(...items.map(i=>i[1]));
-      const width = 640, padding = 14, barH = 28, gap = 10;
-      const h = padding*2 + items.length*barH + (items.length-1)*gap + 30;
-      let y = padding + 20;
-      const parts = [];
-      parts.push(`<div class="chart-wrap"><svg viewBox="0 0 ${width} ${h}" role="img" aria-label="Kategorie-Chart">`);
-      parts.push(`<rect x="0" y="0" width="${width}" height="${h}" fill="#0b1220"/>`);
-      parts.push(`<text x="${padding}" y="${padding+12}" fill="#9fb3d1" font-size="12">Ausgaben nach Kategorie</text>`);
-      items.forEach(([k,v])=>{
-        const w = Math.max(4, Math.round((v/max)*(width - padding*2 - 80)));
-        const x = padding + 80;
-        let color = colorForCategory(k);
-        const total = budgets[k];
-        if (total && total > 0) {
-          const pct = v/total;
-          if (pct >= 0.8) { color = '#f87171'; }
-        }
-        parts.push(`<text x="${padding}" y="${y+18}" fill="#c8e3ff" font-size="12">${escapeHTML(k)}</text>`);
-        parts.push(`<rect x="${x}" y="${y}" rx="6" ry="6" width="${w}" height="${barH}" fill="${color}" opacity="0.9"/>`);
-        parts.push(`<text x="${x+w+6}" y="${y+18}" fill="#9fb3d1" font-size="12">CHF ${v.toFixed(2)}</text>`);
-        y += barH + gap;
-      });
-      parts.push(`</svg></div>`);
-      return parts.join('');
+    function addTap(el, fn){
+      if(!el) return;
+      el.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
+      el.addEventListener('touchstart', (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); }, {passive:false});
     }
-
-    function monthIndexFromGerman(s){
-      const m = {'jan':0,'januar':0,'feb':1,'februar':1,'mär':2,'maerz':2,'märz':2,'apr':3,'april':3,'mai':4,'jun':5,'juni':5,'jul':6,'juli':6,'aug':7,'august':7,'sep':8,'sept':8,'september':8,'okt':9,'oktober':9,'nov':10,'november':10,'dez':11,'dezember':11};
-      const k = s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace('.', '');
-      return (k in m) ? m[k] : -1;
-    }
+    addTap(sendBtn, ()=> send());
+    addTap(budgetAlertBtn, ()=>{
+      const status = calcActiveBudgetStatus();
+      if(status.alerts && status.alerts.length){
+        const lines = status.alerts.map(a=>`${Math.round(a.pct*100)}% • ${a.cat}`);
+        openStatusSheet(lines);
+      }
+    });
+    addTap(closeStatusSheet, ()=> closeStatus());
+    addTap(newChatBtn, ()=> newChat());
+    addTap(avatarBtn, ()=>{
+      authModal.style.display = "grid";
+      if(nameInput) nameInput.focus();
+    });
+    addTap(cancelAuth, ()=> authModal.style.display = "none");
+    addTap(confirmAuth, ()=>{
+      const name = (nameInput && nameInput.value.trim()) || "Demo User";
+      state.user = { name }; save();
+      authModal.style.display = "none";
+    });
 
     (function init(){
       if(!state.activeId){
-        if(state.chats.length){
-          state.activeId = state.chats[0].id;
-        } else {
+        if(state.chats.length){ state.activeId = state.chats[0].id; }
+        else {
           const id = uid();
           state.chats.push({id, title:'', createdAt:Date.now(), msgs:[], entries:[], budgets:{}});
           state.activeId = id;
@@ -722,7 +664,7 @@
       render();
     })();
 
-    window.monee = { reset(){ localStorage.removeItem('monee_user'); localStorage.removeItem('monee_chats_v5'); localStorage.removeItem('monee_active'); location.reload(); } };
+    window.monee = { reset(){ localStorage.removeItem('monee_user'); localStorage.removeItem('monee_chats_v6'); localStorage.removeItem('monee_active'); location.reload(); } };
   </script>
 </body>
 </html>
